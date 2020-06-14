@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\gatsby_revisions\GatsbyRevisionGatsbyHealth;
+use Drupal\gatsby_revisions\GatsbyRevisionOrchestrator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -21,22 +22,30 @@ class GatsbyRevisionForm extends ContentEntityForm {
   protected $gatsbyHealth;
 
   /**
+   * @var GatsbyRevisionOrchestrator
+   */
+  protected $gatsbyOrchestrator;
+
+  /**
    * GatsbyRevisionForm constructor.
    *
    * @param EntityRepositoryInterface $entity_repository
    * @param GatsbyRevisionGatsbyHealth $gatsby_health
+   * @param GatsbyRevisionOrchestrator $gatsby_revision_orchestrator
    * @param EntityTypeBundleInfoInterface|null $entity_type_bundle_info
    * @param TimeInterface|null $time
    */
   public function __construct(
     EntityRepositoryInterface $entity_repository,
     GatsbyRevisionGatsbyHealth $gatsby_health,
+    GatsbyRevisionOrchestrator $gatsby_revision_orchestrator,
     EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL,
     TimeInterface $time = NULL
   ) {
     parent::__construct($entity_repository, $entity_type_bundle_info, $time);
 
     $this->gatsbyHealth = $gatsby_health;
+    $this->gatsbyOrchestrator = $gatsby_revision_orchestrator;
   }
 
   /**
@@ -46,6 +55,7 @@ class GatsbyRevisionForm extends ContentEntityForm {
     return new static(
       $container->get('entity.repository'),
       $container->get('gatsby_revisions.gatsby_health'),
+      $container->get('gatsby_revision.orchestrator'),
       $container->get('entity_type.bundle.info'),
       $container->get('datetime.time')
     );
@@ -72,7 +82,9 @@ class GatsbyRevisionForm extends ContentEntityForm {
 
     if ($entity->isNew()) {
       // First, trigger the request to create an revision it the gatsby server.
-      // Next, create the entity and add the revision id to the entity.
+      $revision = $this->gatsbyOrchestrator->createRevision();
+      dpm($revision);
+      $entity->set('gatsby_revision_number', $revision);
     }
 
     $result = $entity->save();

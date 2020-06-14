@@ -101,7 +101,7 @@ class GatsbyRevision extends ContentEntityBase implements GatsbyRevisionInterfac
       ])
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['gatsby_revision_number'] = BaseFieldDefinition::create('integer')
+    $fields['gatsby_revision_number'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Gatsby Revision number'))
       ->setDescription(t('The number of the revision ID given by the gatsby revision plugin.'))
       ->setRequired(TRUE)

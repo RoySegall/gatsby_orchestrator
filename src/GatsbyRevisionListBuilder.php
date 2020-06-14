@@ -78,9 +78,9 @@ class GatsbyRevisionListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader() {
-    $header['id'] = $this->t('ID');
     $header['title'] = $this->t('Title');
-    $header['created'] = $this->t('Created');
+    $header['description'] = $this->t('Description');
+    $header['revision_id'] = $this->t('Gatsby identifier');
     return $header + parent::buildHeader();
   }
 
@@ -89,9 +89,9 @@ class GatsbyRevisionListBuilder extends EntityListBuilder {
    */
   public function buildRow(EntityInterface $entity) {
     /* @var $entity \Drupal\gatsby_revisions\GatsbyRevisionInterface */
-    $row['id'] = $entity->id();
     $row['title'] = $entity->toLink();
-    $row['created'] = $this->dateFormatter->format($entity->getCreatedTime());
+    $row['description'] = $entity->get('description')->value;
+    $row['revision_id'] = $entity->get('gatsby_revision_number')->value;
     return $row + parent::buildRow($entity);
   }
 
