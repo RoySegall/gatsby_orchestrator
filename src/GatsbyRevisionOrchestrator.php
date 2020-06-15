@@ -93,4 +93,17 @@ class GatsbyRevisionOrchestrator {
     return $this->sendRequest('get', 'revisions');
   }
 
+  /**
+   * Reverting the gatsby build to a revision.
+   *
+   * @param $revision_number
+   *  The revision number.
+   *
+   * @return
+   *  The response of the action.
+   */
+  public function revert($revision_number) {
+    return $this->sendRequest('post', 'revision-revert/' . $revision_number);
+  }
+
 }

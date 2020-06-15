@@ -13,3 +13,5 @@ edit gatsby revision:
   title: Edit gatsby revision
 sync revisions:
   title: Sync revisions
+revert revisions:
+  title: Revert Revisions

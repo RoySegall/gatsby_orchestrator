@@ -13,3 +13,11 @@ gatsby_revisions.sync_revisions:
     _controller: '\Drupal\gatsby_revisions\Controller\GatsbyRevisionsSyncRevisions::build'
   requirements:
     _permission: 'sync revisions'
+
+gatsby_revisions.revert_to_revision:
+  path: '/admin/content/gatsby-revision/{gatsby_revision}/revert'
+  defaults:
+    _title: 'Revert revision'
+    _form: 'Drupal\gatsby_revisions\Form\RevertRevision'
+  requirements:
+    _permission: 'administer site configuration'
