@@ -3,12 +3,11 @@
 /**
  * @file
  * Primary module hooks for Gatsby Revisions module.
- *
- * @DCG
- * This file is no longer required in Drupal 8.
- * @see https://www.drupal.org/node/2217931
  */
 
+/**
+ * Implements hook_entity_view_alter().
+ */
 function gatsby_revisions_entity_view_alter(array &$build, Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display) {
   $build = [
     '#entity_type' => 'gatsby_revision',
