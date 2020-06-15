@@ -8,6 +8,7 @@ use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Routing\RedirectDestinationInterface;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -30,6 +31,11 @@ class GatsbyRevisionListBuilder extends EntityListBuilder {
   protected $redirectDestination;
 
   /**
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentAccount;
+
+  /**
    * Constructs a new GatsbyRevisionListBuilder object.
    *
    * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
@@ -40,11 +46,14 @@ class GatsbyRevisionListBuilder extends EntityListBuilder {
    *   The date formatter service.
    * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect_destination
    *   The redirect destination service.
+   * @param \Drupal\Core\Session\AccountProxyInterface $currect_account
+   *  The account service.
    */
-  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, DateFormatterInterface $date_formatter, RedirectDestinationInterface $redirect_destination) {
+  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, DateFormatterInterface $date_formatter, RedirectDestinationInterface $redirect_destination, \Drupal\Core\Session\AccountProxyInterface $currect_account) {
     parent::__construct($entity_type, $storage);
     $this->dateFormatter = $date_formatter;
     $this->redirectDestination = $redirect_destination;
+    $this->currentAccount = $currect_account;
   }
 
   /**
@@ -55,7 +64,8 @@ class GatsbyRevisionListBuilder extends EntityListBuilder {
       $entity_type,
       $container->get('entity_type.manager')->getStorage($entity_type->id()),
       $container->get('date.formatter'),
-      $container->get('redirect.destination')
+      $container->get('redirect.destination'),
+      $container->get('current_user')
     );
   }
 
@@ -100,10 +110,21 @@ class GatsbyRevisionListBuilder extends EntityListBuilder {
    */
   protected function getDefaultOperations(EntityInterface $entity) {
     $operations = parent::getDefaultOperations($entity);
+
+    if ($this->currentAccount->getAccount()->hasPermission('revert revisions')) {
+      $operations['revert'] = [
+        'title' => $this->t('Revert to this revision'),
+        'weight' => 10,
+        'url' => Url::fromRoute('gatsby_revisions.revert_to_revision', ['gatsby_revision' => $entity->id()]),
+      ];
+    }
+
     $destination = $this->redirectDestination->getAsArray();
+
     foreach ($operations as $key => $operation) {
       $operations[$key]['query'] = $destination;
     }
+
     return $operations;
   }
 
