@@ -11,3 +11,5 @@ view gatsby revision:
   title: View gatsby revision
 edit gatsby revision:
   title: Edit gatsby revision
+sync revisions:
+  title: Sync revisions
