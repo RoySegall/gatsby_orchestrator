@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Gatsby Revisions module.
+ *
+ * @DCG
+ * This file is no longer required in Drupal 8.
+ * @see https://www.drupal.org/node/2217931
+ */
+
+function gatsby_revisions_entity_view_alter(array &$build, Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display) {
+  $build = [
+    '#entity_type' => 'gatsby_revision',
+    '#gatsby_revision' => $entity,
+
+    'title' => [
+      '#type' => 'markup',
+      '#markup' => $entity->label(),
+    ],
+
+    'description' => $entity->get('description')->view(),
+    'revision' => $entity->get('gatsby_revision_number')->view(),
+    'created_at' => $entity->get('created')->view(),
+    'revert' => [
+      '#type' => 'link',
+      '#title' => 'Revert to this revision',
+      '#url' => \Drupal\Core\Url::fromRoute('gatsby_revisions.revert_to_revision', ['gatsby_revision' => $entity->id()]),
+
+      '#attributes' => [
+        'class' => 'button button--primary',
+      ]
+    ],
+  ];
+
+}

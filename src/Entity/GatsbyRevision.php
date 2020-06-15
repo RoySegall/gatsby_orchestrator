@@ -37,7 +37,7 @@ use Drupal\gatsby_revisions\GatsbyRevisionInterface;
  *   },
  *   links = {
  *     "add-form" = "/admin/content/gatsby-revision/add",
- *     "canonical" = "/gatsby_revision/{gatsby_revision}",
+ *     "canonical" = "/admin/content/gatsby-revision/{gatsby_revision}",
  *     "edit-form" = "/admin/content/gatsby-revision/{gatsby_revision}/edit",
  *     "delete-form" = "/admin/content/gatsby-revision/{gatsby_revision}/delete",
  *     "collection" = "/admin/content/gatsby-revision"
