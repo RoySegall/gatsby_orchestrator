@@ -43,28 +43,54 @@ class GatsbyRevisionOrchestrator {
   }
 
   /**
+   * A helper function to send generic requests to gatsby dev server.
+   *
+   * @param $method
+   *  The method of the request: get, post etc. etc.
+   * @param $endpoint
+   *  The endpoint.
+   *
+   * @return mixed|void
+   */
+  protected function sendRequest($method, $endpoint) {
+    $address = $this->gatsbySettings->get('server_url');
+
+    try {
+      $response = $this->httpClient->{$method}($address . $endpoint);
+      return json_decode($response->getBody()->getContents());
+    } catch (\Exception $e) {
+      $this->messenger->addError($e->getMessage());
+      return;
+    }
+  }
+
+  /**
    * The method create revision via the gatsby revisions plugin.
    *
    * @return
    *  The newly crete revision.
    */
-  public function createRevision($callback = NULL) {
-    $address = $this->gatsbySettings->get('server_url');
-
+  public function createRevision() {
     if ($this->gatsbyHealth->checkGatsbyHealth() == GatsbyRevisionGatsbyHealth::GATSBY_SERVICE_DOWN) {
       return;
     }
 
-    try {
-      $response = $this->httpClient->post($address . 'revision');
-      $decoded_response = json_decode($response->getBody()->getContents());
+    if ($response = $this->sendRequest('post', 'revision')) {
+      return $response->revisionId;
+    }
 
-      return $decoded_response->revisionId;
+    return;
+  }
 
-    } catch (\Exception $exception) {
-      $this->messenger->addError($exception->getMessage());
+  /**
+   * Get all the revisions from gatsby and create a reference.
+   */
+  public function getRevisions() {
+    if ($this->gatsbyHealth->checkGatsbyHealth() == GatsbyRevisionGatsbyHealth::GATSBY_SERVICE_DOWN) {
       return;
     }
+
+    return $this->sendRequest('get', 'revisions');
   }
 
 }

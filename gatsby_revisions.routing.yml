@@ -5,3 +5,11 @@ entity.gatsby_revision.settings:
     _title: 'Gatsby Revision'
   requirements:
     _permission: 'administer gatsby revision'
+
+gatsby_revisions.sync_revisions:
+  path: '/admin/content/gatsby-revision/sync'
+  defaults:
+    _title: 'Sync Revisions'
+    _controller: '\Drupal\gatsby_revisions\Controller\GatsbyRevisionsSyncRevisions::build'
+  requirements:
+    _permission: 'sync revisions'
