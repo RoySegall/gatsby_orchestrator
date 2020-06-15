@@ -42,7 +42,17 @@ class GatsbyRevisionOrchestrator {
     $this->gatsbyHealth = $gatsby_health;
   }
 
-  protected function sendRequest($endpoint, $method) {
+  /**
+   * A helper function to send generic requests to gatsby dev server.
+   *
+   * @param $method
+   *  The method of the request: get, post etc. etc.
+   * @param $endpoint
+   *  The endpoint.
+   *
+   * @return mixed|void
+   */
+  protected function sendRequest($method, $endpoint) {
     $address = $this->gatsbySettings->get('server_url');
 
     try {
@@ -65,7 +75,7 @@ class GatsbyRevisionOrchestrator {
       return;
     }
 
-    if ($response = $this->sendRequest('revision', 'post')) {
+    if ($response = $this->sendRequest('post', 'revision')) {
       return $response->revisionId;
     }
 
@@ -80,7 +90,7 @@ class GatsbyRevisionOrchestrator {
       return;
     }
 
-    return $this->sendRequest('revisions', 'get');
+    return $this->sendRequest('get', 'revisions');
   }
 
 }
