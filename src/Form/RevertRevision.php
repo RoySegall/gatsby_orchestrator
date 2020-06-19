@@ -79,7 +79,6 @@ class RevertRevision extends ConfirmFormBase {
       ->gatsbyRevisionOrchestrator
       ->revert($gatsby_revision->get('gatsby_revision_number')->value);
 
-    // @DCG Place your code here.
     $this->messenger()->addStatus($response->message);
     $form_state->setRedirectUrl($this->getCancelUrl());
   }
