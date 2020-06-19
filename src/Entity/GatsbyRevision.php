@@ -47,6 +47,18 @@ use Drupal\gatsby_revisions\GatsbyRevisionInterface;
  */
 class GatsbyRevision extends ContentEntityBase implements GatsbyRevisionInterface {
 
+  const STATUS_FAILED = 0;
+  const STATUS_PASSED = 1;
+  const STATUS_IN_PROCESS = 2;
+
+  public static function getStatuses() {
+    return [
+      self::STATUS_FAILED => t('Failed'),
+      self::STATUS_PASSED => t('Passed'),
+      self::STATUS_IN_PROCESS => t('In process'),
+    ];
+  }
+
   /**
    * {@inheritdoc}
    */
@@ -122,6 +134,28 @@ class GatsbyRevision extends ContentEntityBase implements GatsbyRevisionInterfac
         'type' => 'string_textfield',
         'weight' => 10,
       ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('view', [
+        'type' => 'text_default',
+        'label' => 'above',
+        'weight' => 10,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['status'] = BaseFieldDefinition::create('list_integer')
+      ->setLabel(t('Revision process results'))
+      ->setDescription(t('The status of the process .'))
+      ->setDefaultValue(3600)
+      ->setSetting('unsigned', TRUE)
+      ->setRequired(TRUE)
+      ->setSetting('allowed_values', self::getStatuses())
+      ->setDisplayOptions('form', [])
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['error'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Error'))
+      ->setDescription(t('Displaying an error in snapshot creation, if any'))
+      ->setDisplayOptions('form', [])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
         'type' => 'text_default',

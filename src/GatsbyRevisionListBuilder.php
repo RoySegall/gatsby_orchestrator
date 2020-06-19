@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Routing\RedirectDestinationInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\gatsby_revisions\Entity\GatsbyRevision;
 
 /**
  * Provides a list controller for the gatsby revision entity type.
@@ -91,6 +92,8 @@ class GatsbyRevisionListBuilder extends EntityListBuilder {
     $header['title'] = $this->t('Title');
     $header['description'] = $this->t('Description');
     $header['revision_id'] = $this->t('Gatsby identifier');
+    $header['status'] = $this->t('Status');
+    $header['error'] = $this->t('error');
     return $header + parent::buildHeader();
   }
 
@@ -98,10 +101,14 @@ class GatsbyRevisionListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
+    $statuses = GatsbyRevision::getStatuses();
+
     /* @var $entity \Drupal\gatsby_revisions\GatsbyRevisionInterface */
     $row['title'] = $entity->toLink();
     $row['description'] = $entity->get('description')->value;
     $row['revision_id'] = $entity->get('gatsby_revision_number')->value;
+    $row['status'] = $statuses[$entity->get('status')->value];
+    $row['error'] = $entity->get('error')->value;
     return $row + parent::buildRow($entity);
   }
 

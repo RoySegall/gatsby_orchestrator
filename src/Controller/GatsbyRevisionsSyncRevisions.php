@@ -3,7 +3,7 @@
 namespace Drupal\gatsby_revisions\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\gatsby_revisions\Entity\GatsbyRevision;
 use Drupal\gatsby_revisions\GatsbyRevisionOrchestrator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -45,6 +45,7 @@ class GatsbyRevisionsSyncRevisions extends ControllerBase {
     $values = [
       'title' => "{$gatsby_revision} synced revision from gatsby",
       'gatsby_revision_number' => $gatsby_revision,
+      'status' => GatsbyRevision::STATUS_PASSED,
     ];
     $this
       ->entityTypeManager()

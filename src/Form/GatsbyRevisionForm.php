@@ -7,6 +7,7 @@ use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\gatsby_revisions\Entity\GatsbyRevision;
 use Drupal\gatsby_revisions\GatsbyRevisionGatsbyHealth;
 use Drupal\gatsby_revisions\GatsbyRevisionOrchestrator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -83,8 +84,9 @@ class GatsbyRevisionForm extends ContentEntityForm {
     if ($entity->isNew()) {
       // First, trigger the request to create an revision it the gatsby server.
       $revision = $this->gatsbyOrchestrator->createRevision();
-      dpm($revision);
+
       $entity->set('gatsby_revision_number', $revision);
+      $entity->set('status', GatsbyRevision::STATUS_IN_PROCESS);
     }
 
     $result = $entity->save();
