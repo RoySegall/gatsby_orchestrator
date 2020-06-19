@@ -7,8 +7,8 @@ use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth;
 use Drupal\gatsby_revisions\Entity\GatsbyRevision;
-use Drupal\gatsby_revisions\GatsbyRevisionGatsbyHealth;
 use Drupal\gatsby_revisions\GatsbyRevisionOrchestrator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class GatsbyRevisionForm extends ContentEntityForm {
 
   /**
-   * @var GatsbyRevisionGatsbyHealth
+   * @var GatsbyOrchestratorGatsbyHealth
    */
   protected $gatsbyHealth;
 
@@ -31,14 +31,14 @@ class GatsbyRevisionForm extends ContentEntityForm {
    * GatsbyRevisionForm constructor.
    *
    * @param EntityRepositoryInterface $entity_repository
-   * @param GatsbyRevisionGatsbyHealth $gatsby_health
+   * @param GatsbyOrchestratorGatsbyHealth $gatsby_health
    * @param GatsbyRevisionOrchestrator $gatsby_revision_orchestrator
    * @param EntityTypeBundleInfoInterface|null $entity_type_bundle_info
    * @param TimeInterface|null $time
    */
   public function __construct(
     EntityRepositoryInterface $entity_repository,
-    GatsbyRevisionGatsbyHealth $gatsby_health,
+    GatsbyOrchestratorGatsbyHealth $gatsby_health,
     GatsbyRevisionOrchestrator $gatsby_revision_orchestrator,
     EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL,
     TimeInterface $time = NULL
@@ -55,7 +55,7 @@ class GatsbyRevisionForm extends ContentEntityForm {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity.repository'),
-      $container->get('gatsby_revisions.gatsby_health'),
+      $container->get('gatsby_orchestrator.gatsby_health'),
       $container->get('gatsby_revision.orchestrator'),
       $container->get('entity_type.bundle.info'),
       $container->get('datetime.time')
@@ -69,7 +69,7 @@ class GatsbyRevisionForm extends ContentEntityForm {
     $actions = parent::actions($form, $form_state);
 
     # If the service is alive then
-    $actions['submit']['#disabled'] = $this->gatsbyHealth->checkGatsbyHealth() == GatsbyRevisionGatsbyHealth::GATSBY_SERVICE_DOWN;
+    $actions['submit']['#disabled'] = $this->gatsbyHealth->checkGatsbyHealth() == GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_DOWN;
 
     return $actions;
   }

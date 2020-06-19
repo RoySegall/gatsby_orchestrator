@@ -3,7 +3,7 @@
 namespace Drupal\gatsby_revisions;
 
 use Drupal\Core\Messenger\Messenger;
-use Symfony\Component\HttpFoundation\Response;
+use Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth;
 
 class GatsbyRevisionOrchestrator {
 
@@ -23,7 +23,7 @@ class GatsbyRevisionOrchestrator {
   protected $httpClient;
 
   /**
-   * @var GatsbyRevisionGatsbyHealth
+   * @var GatsbyOrchestratorGatsbyHealth
    */
   protected $gatsbyHealth;
 
@@ -33,9 +33,9 @@ class GatsbyRevisionOrchestrator {
    * @param \Drupal\Core\Config\ConfigFactory $config_factory
    * @param \Drupal\Core\Messenger\Messenger $messenger
    * @param \GuzzleHttp\Client $http_client
-   * @param GatsbyRevisionGatsbyHealth $gatsby_health
+   * @param GatsbyOrchestratorGatsbyHealth $gatsby_health
    */
-  public function __construct(\Drupal\Core\Config\ConfigFactory $config_factory, Messenger $messenger, \GuzzleHttp\Client $http_client, GatsbyRevisionGatsbyHealth $gatsby_health) {
+  public function __construct(\Drupal\Core\Config\ConfigFactory $config_factory, Messenger $messenger, \GuzzleHttp\Client $http_client, GatsbyOrchestratorGatsbyHealth $gatsby_health) {
     $this->gatsbySettings = $config_factory->get('gatsby.settings');
     $this->messenger = $messenger;
     $this->httpClient = $http_client;
@@ -71,7 +71,7 @@ class GatsbyRevisionOrchestrator {
    *  The newly crete revision.
    */
   public function createRevision() {
-    if ($this->gatsbyHealth->checkGatsbyHealth() == GatsbyRevisionGatsbyHealth::GATSBY_SERVICE_DOWN) {
+    if ($this->gatsbyHealth->checkGatsbyHealth() == GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_DOWN) {
       return;
     }
 
@@ -86,7 +86,7 @@ class GatsbyRevisionOrchestrator {
    * Get all the revisions from gatsby and create a reference.
    */
   public function getRevisions() {
-    if ($this->gatsbyHealth->checkGatsbyHealth() == GatsbyRevisionGatsbyHealth::GATSBY_SERVICE_DOWN) {
+    if ($this->gatsbyHealth->checkGatsbyHealth() == GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_DOWN) {
       return;
     }
 

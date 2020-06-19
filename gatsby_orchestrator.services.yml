@@ -1,0 +1,4 @@
+services:
+  gatsby_orchestrator.gatsby_health:
+    class: Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth
+    arguments: ['@config.factory', '@messenger', '@http_client']
