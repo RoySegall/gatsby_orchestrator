@@ -1,0 +1,8 @@
+name: Gatsby Orechestrator
+type: module
+description: Orchestrate action for gatsby
+package: Custom
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - gatsby

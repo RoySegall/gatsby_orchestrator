@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Gatsby Revisions module.
+ */
+
+/**
+ * Implements hook_entity_view_alter().
+ */
+function gatsby_revisions_entity_view_alter(array &$build, Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display) {
+
+  if ($entity->getEntityTypeId() != 'gatsby_revision') {
+    return;
+  }
+
+  $build = [
+    '#entity_type' => 'gatsby_revision',
+    '#gatsby_revision' => $entity,
+
+    'title' => [
+      '#type' => 'markup',
+      '#markup' => $entity->label(),
+    ],
+
+    'description' => $entity->get('description')->view(),
+    'revision' => $entity->get('gatsby_revision_number')->view(),
+    'created_at' => $entity->get('created')->view(),
+    'status' => $entity->get('status')->view(),
+    'error' => $entity->get('error')->view(),
+    'revert' => [
+      '#type' => 'link',
+      '#title' => 'Revert to this revision',
+      '#url' => \Drupal\Core\Url::fromRoute('gatsby_revisions.revert_to_revision', ['gatsby_revision' => $entity->id()]),
+
+      '#attributes' => [
+        'class' => 'button button--primary',
+      ]
+    ],
+  ];
+
+}

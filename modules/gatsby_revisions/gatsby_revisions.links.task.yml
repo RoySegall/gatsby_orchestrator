@@ -1,0 +1,22 @@
+entity.gatsby_revision.settings:
+  title: Settings
+  route_name: entity.gatsby_revision.settings
+  base_route: entity.gatsby_revision.settings
+entity.gatsby_revision.view:
+  title: View
+  route_name: entity.gatsby_revision.canonical
+  base_route: entity.gatsby_revision.canonical
+entity.gatsby_revision.edit_form:
+  title: Edit
+  route_name: entity.gatsby_revision.edit_form
+  base_route: entity.gatsby_revision.canonical
+entity.gatsby_revision.delete_form:
+  title: Delete
+  route_name: entity.gatsby_revision.delete_form
+  base_route: entity.gatsby_revision.canonical
+  weight: 10
+entity.gatsby_revision.collection:
+  title: Gatsby Revision
+  route_name: entity.gatsby_revision.collection
+  base_route: system.admin_content
+  weight: 10

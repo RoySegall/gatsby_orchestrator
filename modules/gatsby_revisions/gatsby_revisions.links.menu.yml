@@ -1,0 +1,10 @@
+entity.gatsby_revision.settings:
+  title: Gatsby Revision
+  description: Configure a Gatsby Revision entity type
+  route_name:  entity.gatsby_revision.settings
+  parent: system.admin_structure
+entity.gatsby_revision.collection:
+  title: Gatsby Revisions
+  description: List of gatsby revisions
+  route_name: entity.gatsby_revision.collection
+  parent: system.admin_content

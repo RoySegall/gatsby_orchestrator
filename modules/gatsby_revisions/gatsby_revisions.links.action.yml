@@ -1,0 +1,11 @@
+gatsby_revision.add_form:
+  route_name: entity.gatsby_revision.add_form
+  title: 'Add gatsby revision'
+  appears_on:
+    - entity.gatsby_revision.collection
+
+gatsby_revision.sync_revisions:
+  route_name: gatsby_revisions.sync_revisions
+  title: 'Sync revisions'
+  appears_on:
+    - entity.gatsby_revision.collection

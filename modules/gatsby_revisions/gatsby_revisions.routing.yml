@@ -1,0 +1,23 @@
+gatsby_revisions.sync_revisions:
+  path: '/admin/content/gatsby-revision/sync'
+  defaults:
+    _title: 'Sync Revisions'
+    _controller: '\Drupal\gatsby_revisions\Controller\GatsbyRevisionsSyncRevisions::build'
+  requirements:
+    _permission: 'sync revisions'
+
+gatsby_revisions.revert_to_revision:
+  path: '/admin/content/gatsby-revision/{gatsby_revision}/revert'
+  defaults:
+    _title: 'Revert revision'
+    _form: 'Drupal\gatsby_revisions\Form\RevertRevision'
+  requirements:
+    _permission: 'administer site configuration'
+
+gatsby_revisions.event_listener:
+  path: '/gatsby-revisions/event-listener'
+  defaults:
+    _title: 'Gatsby event listener endpoint'
+    _controller: '\Drupal\gatsby_revisions\Controller\GatsbyRevisionEventsListener::build'
+  requirements:
+    _custom_access: '\Drupal\gatsby_revisions\Controller\GatsbyRevisionEventsListener::access'

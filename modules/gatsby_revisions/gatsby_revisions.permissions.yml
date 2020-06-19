@@ -1,0 +1,17 @@
+administer gatsby revision:
+  title: 'Administer gatsby revision settings'
+  restrict access: true
+access gatsby revision overview:
+  title: 'Access gatsby revision overview page'
+delete gatsby revision:
+  title: Delete gatsby revision
+create gatsby revision:
+  title: Create gatsby revision
+view gatsby revision:
+  title: View gatsby revision
+edit gatsby revision:
+  title: Edit gatsby revision
+sync revisions:
+  title: Sync revisions
+revert revisions:
+  title: Revert Revisions
