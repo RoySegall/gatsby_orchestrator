@@ -54,26 +54,30 @@ class GatsbyRevisionEventsListener extends ControllerBase {
    * @param $decoded_content
    */
   public function updateGatsbyRevisionEntity($decoded_content) {
+    $logger = $this->getLogger('gatsby_revision');
     $storage = $this->entityTypeManager()->getStorage('gatsby_revision');
 
-    $results = $storage->getQuery()
-      ->condition('gatsby_revision_number', $decoded_content->revisionId)
-      ->execute();
+    $gatsby_revision_ids = $storage->getQuery()->condition('gatsby_revision_number', $decoded_content->revisionId)->execute();
 
-    if (!$results) {
-      // todo: log.
+    if (!$gatsby_revision_ids) {
+      $params = [
+        '@id' => $decoded_content->revisionId,
+      ];
+      $logger->error(t('A notification for the gatsby revision with the ID @id was sent but there is no record in the DB for a revision like that', $params));
       return;
     }
 
-    /** @var GatsbyRevision $entity */
-    $entity = $storage->load(reset($results));
+    /** @var GatsbyRevision $gatsby_revision */
+    $gatsby_revision = $storage->load(reset($gatsby_revision_ids));
 
-    // todo: check if it failed.
-    $entity->set('status', GatsbyRevision::STATUS_PASSED);
-//    $entity->set('error', '');
+    if ($decoded_content->status == 'succeeded') {
+      $gatsby_revision->set('status', GatsbyRevision::STATUS_PASSED);
+    } else {
+      $gatsby_revision->set('status', GatsbyRevision::STATUS_FAILED);
+      $gatsby_revision->set('error', $decoded_content->data);
+    }
 
-    $entity->save();
-    // todo: log.
+    $gatsby_revision->save();
   }
 
 }

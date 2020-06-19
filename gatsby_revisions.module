@@ -9,9 +9,11 @@
  * Implements hook_entity_view_alter().
  */
 function gatsby_revisions_entity_view_alter(array &$build, Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display) {
-  // todo: check if entity gatsby revision type.
 
-  return;
+  if ($entity->getEntityTypeId() != 'gatsby_revision') {
+    return;
+  }
+
   $build = [
     '#entity_type' => 'gatsby_revision',
     '#gatsby_revision' => $entity,
