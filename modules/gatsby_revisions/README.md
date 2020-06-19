@@ -7,10 +7,8 @@ for the [Gatsby JS](https://gatsbyjs.org/) static site generator.
 ## Requirements
 
 ### Drupal
-Fo the Drupal POV you need to have the [GatsbyJS](https://www.drupal.org/project/gatsby)
-module enabled. Then, set the GatsbyJS address in the
-`Gatsby Integration Settings` page (which serves in the path
-`admin/config/services/gatsby/settings` of your Drupal installation).
+No need for fancy stuff. You'll need to enable the `Gatsby orchestrator` module
+and follow the steps there.
 
 ### GatsbyJS
 In the GatsbyJS project, install the plugin and set the `eventsAddressBroadcast`
