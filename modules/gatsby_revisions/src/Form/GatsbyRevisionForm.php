@@ -7,9 +7,10 @@ use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\gatsby_orchestrator\GatsbyOrchestratePluginManager;
 use Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth;
 use Drupal\gatsby_revisions\Entity\GatsbyRevision;
-use Drupal\gatsby_orchestrator\GatsbyOrchestrator;
+use Drupal\gatsby_revisions\Plugin\GatsbyOrchestrate\GatsbyRevisionCreate;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -23,30 +24,30 @@ class GatsbyRevisionForm extends ContentEntityForm {
   protected $gatsbyHealth;
 
   /**
-   * @var GatsbyOrchestrator
+   * @var GatsbyRevisionCreate
    */
-  protected $gatsbyOrchestrator;
+  protected $revisionPlugin;
 
   /**
    * GatsbyRevisionForm constructor.
    *
    * @param EntityRepositoryInterface $entity_repository
    * @param GatsbyOrchestratorGatsbyHealth $gatsby_health
-   * @param GatsbyOrchestrator $gatsby_revision_orchestrator
+   * @param GatsbyOrchestratePluginManager $gatsby_orchestrator_plugin_manager
    * @param EntityTypeBundleInfoInterface|null $entity_type_bundle_info
    * @param TimeInterface|null $time
    */
   public function __construct(
     EntityRepositoryInterface $entity_repository,
     GatsbyOrchestratorGatsbyHealth $gatsby_health,
-    GatsbyOrchestrator $gatsby_revision_orchestrator,
+    GatsbyOrchestratePluginManager $gatsby_orchestrator_plugin_manager,
     EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL,
     TimeInterface $time = NULL
   ) {
     parent::__construct($entity_repository, $entity_type_bundle_info, $time);
 
     $this->gatsbyHealth = $gatsby_health;
-    $this->gatsbyOrchestrator = $gatsby_revision_orchestrator;
+    $this->revisionPlugin = $gatsby_orchestrator_plugin_manager->createInstance('create_revision');
   }
 
   /**
@@ -56,7 +57,7 @@ class GatsbyRevisionForm extends ContentEntityForm {
     return new static(
       $container->get('entity.repository'),
       $container->get('gatsby_orchestrator.gatsby_health'),
-      $container->get('gatsby_orchestrator.orchestrator'),
+      $container->get('plugin.manager.gatsby_orchestrate'),
       $container->get('entity_type.bundle.info'),
       $container->get('datetime.time')
     );
@@ -83,7 +84,7 @@ class GatsbyRevisionForm extends ContentEntityForm {
 
     if ($entity->isNew()) {
       // First, trigger the request to create an revision it the gatsby server.
-      $revision = $this->gatsbyOrchestrator->createRevision();
+      $revision = $this->revisionPlugin->orchestrate();
 
       $entity->set('gatsby_revision_number', $revision);
       $entity->set('status', GatsbyRevision::STATUS_IN_PROCESS);

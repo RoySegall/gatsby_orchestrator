@@ -3,8 +3,9 @@
 namespace Drupal\gatsby_revisions\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\gatsby_orchestrator\GatsbyOrchestratePluginManager;
 use Drupal\gatsby_revisions\Entity\GatsbyRevision;
-use Drupal\gatsby_orchestrator\GatsbyOrchestrator;
+use Drupal\gatsby_revisions\Plugin\GatsbyOrchestrate\GatsbyRevisionsQuery;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -13,17 +14,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class GatsbyRevisionsSyncRevisions extends ControllerBase {
 
   /**
-   * @var GatsbyOrchestrator
+   * @var GatsbyRevisionsQuery
    */
-  protected $gatsbyOrchestrator;
+  protected $getRevisionsQuery;
 
   /**
    * GatsbyRevisionsSyncRevisions constructor.
    *
-   * @param GatsbyOrchestrator $gatsby_revision_orchestrator
+   * @param GatsbyOrchestratePluginManager $gatsby_orchestrator_plugin_manager
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  public function __construct(GatsbyOrchestrator $gatsby_revision_orchestrator) {
-    $this->gatsbyOrchestrator = $gatsby_revision_orchestrator;
+  public function __construct(GatsbyOrchestratePluginManager $gatsby_orchestrator_plugin_manager) {
+    $this->getRevisionsQuery = $gatsby_orchestrator_plugin_manager->createInstance('get_revisions');
   }
 
   /**
@@ -31,7 +34,7 @@ class GatsbyRevisionsSyncRevisions extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('gatsby_orchestrator.orchestrator')
+      $container->get('plugin.manager.gatsby_orchestrate')
     );
   }
 
@@ -73,7 +76,7 @@ class GatsbyRevisionsSyncRevisions extends ControllerBase {
       $existing_revisions[] = $revision;
     }
 
-    $gatsby_revisions = $this->gatsbyOrchestrator->getRevisions();
+    $gatsby_revisions = $this->getRevisionsQuery->orchestrate();
 
     $info = [
       '@skipped' => 0,

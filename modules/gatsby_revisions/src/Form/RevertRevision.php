@@ -6,8 +6,9 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\gatsby_orchestrator\GatsbyOrchestratePluginManager;
 use Drupal\gatsby_revisions\Entity\GatsbyRevision;
-use Drupal\gatsby_orchestrator\GatsbyOrchestrator;
+use Drupal\gatsby_revisions\Plugin\GatsbyOrchestrate\GatsbyRevisionsRevert;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -16,22 +17,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class RevertRevision extends ConfirmFormBase {
 
   /**
-   * @var GatsbyOrchestrator
+   * @var GatsbyRevisionsRevert
    */
-  protected $gatsbyOrchestrator;
+  protected $revertRevision;
 
   /**
    * @var EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
-  /**
-   * RevertRevision constructor.
-   *
-   * @param GatsbyOrchestrator $gatsby_revision_orchestrator
-   */
-  public function __construct(GatsbyOrchestrator $gatsby_revision_orchestrator, EntityTypeManagerInterface $entity_type_manager) {
-    $this->gatsbyOrchestrator = $gatsby_revision_orchestrator;
+  public function __construct(GatsbyOrchestratePluginManager $gatsby_orchestrator_plugin_manager, EntityTypeManagerInterface $entity_type_manager) {
+    $this->revertRevision = $gatsby_orchestrator_plugin_manager->createInstance('revert_revision');
     $this->entityTypeManager = $entity_type_manager;
   }
 
@@ -40,7 +36,7 @@ class RevertRevision extends ConfirmFormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('gatsby_orchestrator.orchestrator'),
+      $container->get('plugin.manager.gatsby_orchestrate'),
       $container->get('entity_type.manager')
     );
   }
@@ -76,8 +72,9 @@ class RevertRevision extends ConfirmFormBase {
     $gatsby_revision = $this->entityTypeManager->getStorage('gatsby_revision')->load($gatsby_revision);
 
     $response = $this
-      ->gatsbyOrchestrator
-      ->revert($gatsby_revision->get('gatsby_revision_number')->value);
+      ->revertRevision
+      ->setRevisionNumber($gatsby_revision->get('gatsby_revision_number')->value)
+      ->orchestrate();
 
     $this->messenger()->addStatus($response->message);
     $form_state->setRedirectUrl($this->getCancelUrl());
