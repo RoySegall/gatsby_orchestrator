@@ -1,7 +1,0 @@
-services:
-  gatsby_revisions.gatsby_health:
-    class: Drupal\gatsby_revisions\GatsbyRevisionGatsbyHealth
-    arguments: ['@config.factory', '@messenger', '@http_client']
-  gatsby_revision.orchestrator:
-    class: Drupal\gatsby_revisions\GatsbyRevisionOrchestrator
-    arguments: ['@config.factory', '@messenger', '@http_client', '@gatsby_revisions.gatsby_health']

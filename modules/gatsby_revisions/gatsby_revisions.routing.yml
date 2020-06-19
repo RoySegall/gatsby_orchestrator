@@ -1,3 +1,11 @@
+entity.gatsby_revision.settings:
+  path: 'admin/structure/gatsby-revision'
+  defaults:
+    _form: '\Drupal\gatsby_revisions\Form\GatsbyRevisionSettingsForm'
+    _title: 'Gatsby Revision'
+  requirements:
+    _permission: 'administer gatsby revision'
+
 gatsby_revisions.sync_revisions:
   path: '/admin/content/gatsby-revision/sync'
   defaults:

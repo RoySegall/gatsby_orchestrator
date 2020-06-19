@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\gatsby_revisions;
+namespace Drupal\gatsby_orchestrator;
 
 use Drupal\Core\Messenger\Messenger;
 use Symfony\Component\HttpFoundation\Response;
 
-class GatsbyRevisionGatsbyHealth {
+class GatsbyOrchestratorGatsbyHealth {
 
   const GATSBY_SERVICE_DOWN = 0;
   const GATSBY_SERVICE_UP = 1;
