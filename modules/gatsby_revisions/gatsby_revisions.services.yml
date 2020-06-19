@@ -1,4 +1,0 @@
-services:
-  gatsby_revision.orchestrator:
-    class: Drupal\gatsby_revisions\GatsbyRevisionOrchestrator
-    arguments: ['@config.factory', '@messenger', '@http_client', '@gatsby_orchestrator.gatsby_health']

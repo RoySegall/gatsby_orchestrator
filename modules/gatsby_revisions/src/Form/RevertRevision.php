@@ -7,7 +7,7 @@ use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\gatsby_revisions\Entity\GatsbyRevision;
-use Drupal\gatsby_revisions\GatsbyRevisionOrchestrator;
+use Drupal\gatsby_orchestrator\GatsbyOrchestrator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -16,9 +16,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class RevertRevision extends ConfirmFormBase {
 
   /**
-   * @var GatsbyRevisionOrchestrator
+   * @var GatsbyOrchestrator
    */
-  protected $gatsbyRevisionOrchestrator;
+  protected $gatsbyOrchestrator;
 
   /**
    * @var EntityTypeManagerInterface
@@ -28,10 +28,10 @@ class RevertRevision extends ConfirmFormBase {
   /**
    * RevertRevision constructor.
    *
-   * @param GatsbyRevisionOrchestrator $gatsby_revision_orchestrator
+   * @param GatsbyOrchestrator $gatsby_revision_orchestrator
    */
-  public function __construct(GatsbyRevisionOrchestrator $gatsby_revision_orchestrator, EntityTypeManagerInterface $entity_type_manager) {
-    $this->gatsbyRevisionOrchestrator = $gatsby_revision_orchestrator;
+  public function __construct(GatsbyOrchestrator $gatsby_revision_orchestrator, EntityTypeManagerInterface $entity_type_manager) {
+    $this->gatsbyOrchestrator = $gatsby_revision_orchestrator;
     $this->entityTypeManager = $entity_type_manager;
   }
 
@@ -40,7 +40,7 @@ class RevertRevision extends ConfirmFormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('gatsby_revision.orchestrator'),
+      $container->get('gatsby_orchestrator.orchestrator'),
       $container->get('entity_type.manager')
     );
   }
@@ -76,7 +76,7 @@ class RevertRevision extends ConfirmFormBase {
     $gatsby_revision = $this->entityTypeManager->getStorage('gatsby_revision')->load($gatsby_revision);
 
     $response = $this
-      ->gatsbyRevisionOrchestrator
+      ->gatsbyOrchestrator
       ->revert($gatsby_revision->get('gatsby_revision_number')->value);
 
     $this->messenger()->addStatus($response->message);

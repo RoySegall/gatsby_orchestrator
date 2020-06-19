@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\gatsby_revisions;
+namespace Drupal\gatsby_orchestrator;
 
 use Drupal\Core\Messenger\Messenger;
 use Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth;
 
-class GatsbyRevisionOrchestrator {
+class GatsbyOrchestrator {
 
   /**
    * @var \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig

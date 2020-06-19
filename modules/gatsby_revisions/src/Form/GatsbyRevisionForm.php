@@ -9,7 +9,7 @@ use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth;
 use Drupal\gatsby_revisions\Entity\GatsbyRevision;
-use Drupal\gatsby_revisions\GatsbyRevisionOrchestrator;
+use Drupal\gatsby_orchestrator\GatsbyOrchestrator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -23,7 +23,7 @@ class GatsbyRevisionForm extends ContentEntityForm {
   protected $gatsbyHealth;
 
   /**
-   * @var GatsbyRevisionOrchestrator
+   * @var GatsbyOrchestrator
    */
   protected $gatsbyOrchestrator;
 
@@ -32,14 +32,14 @@ class GatsbyRevisionForm extends ContentEntityForm {
    *
    * @param EntityRepositoryInterface $entity_repository
    * @param GatsbyOrchestratorGatsbyHealth $gatsby_health
-   * @param GatsbyRevisionOrchestrator $gatsby_revision_orchestrator
+   * @param GatsbyOrchestrator $gatsby_revision_orchestrator
    * @param EntityTypeBundleInfoInterface|null $entity_type_bundle_info
    * @param TimeInterface|null $time
    */
   public function __construct(
     EntityRepositoryInterface $entity_repository,
     GatsbyOrchestratorGatsbyHealth $gatsby_health,
-    GatsbyRevisionOrchestrator $gatsby_revision_orchestrator,
+    GatsbyOrchestrator $gatsby_revision_orchestrator,
     EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL,
     TimeInterface $time = NULL
   ) {
@@ -56,7 +56,7 @@ class GatsbyRevisionForm extends ContentEntityForm {
     return new static(
       $container->get('entity.repository'),
       $container->get('gatsby_orchestrator.gatsby_health'),
-      $container->get('gatsby_revision.orchestrator'),
+      $container->get('gatsby_orchestrator.orchestrator'),
       $container->get('entity_type.bundle.info'),
       $container->get('datetime.time')
     );
