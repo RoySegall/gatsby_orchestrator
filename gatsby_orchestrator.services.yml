@@ -5,3 +5,6 @@ services:
   plugin.manager.gatsby_orchestrate:
     class: Drupal\gatsby_orchestrator\GatsbyOrchestratePluginManager
     parent: default_plugin_manager
+  plugin.manager.gatsby_event_listener:
+    class: Drupal\gatsby_orchestrator\GatsbyEventListenerPluginManager
+    parent: default_plugin_manager
