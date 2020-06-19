@@ -47,10 +47,27 @@ use Drupal\gatsby_revisions\GatsbyRevisionInterface;
  */
 class GatsbyRevision extends ContentEntityBase implements GatsbyRevisionInterface {
 
+  /**
+   * Status for a failed revision build.
+   */
   const STATUS_FAILED = 0;
+
+  /**
+   * Status for a successful build.
+   */
   const STATUS_PASSED = 1;
+
+  /**
+   * Status for in build revision.
+   */
   const STATUS_IN_PROCESS = 2;
 
+  /**
+   * Get a list of all the state for the gatsby revision build mode.
+   *
+   * @return array
+   *  List of key-label for the status of the revision state.
+   */
   public static function getStatuses() {
     return [
       self::STATUS_FAILED => t('Failed'),
@@ -144,7 +161,7 @@ class GatsbyRevision extends ContentEntityBase implements GatsbyRevisionInterfac
 
     $fields['status'] = BaseFieldDefinition::create('list_integer')
       ->setLabel(t('Revision process results'))
-      ->setDescription(t('The status of the process .'))
+      ->setDescription(t('The status of the process.'))
       ->setDefaultValue(3600)
       ->setSetting('unsigned', TRUE)
       ->setRequired(TRUE)
@@ -154,7 +171,7 @@ class GatsbyRevision extends ContentEntityBase implements GatsbyRevisionInterfac
 
     $fields['error'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Error'))
-      ->setDescription(t('Displaying an error in snapshot creation, if any'))
+      ->setDescription(t('Displaying an error in snapshot creation, if any.'))
       ->setDisplayOptions('form', [])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
