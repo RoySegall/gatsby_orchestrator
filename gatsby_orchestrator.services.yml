@@ -5,3 +5,6 @@ services:
   gatsby_orchestrator.orchestrator:
     class: Drupal\gatsby_orchestrator\GatsbyOrchestrator
     arguments: ['@config.factory', '@messenger', '@http_client', '@gatsby_orchestrator.gatsby_health']
+  plugin.manager.gatsby_orchestrate:
+    class: Drupal\gatsby_orchestrator\GatsbyOrchestratePluginManager
+    parent: default_plugin_manager

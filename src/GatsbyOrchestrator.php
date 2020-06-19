@@ -65,35 +65,6 @@ class GatsbyOrchestrator {
   }
 
   /**
-   * The method create revision via the gatsby revisions plugin.
-   *
-   * @return
-   *  The newly crete revision.
-   */
-  public function createRevision() {
-    if ($this->gatsbyHealth->checkGatsbyHealth() == GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_DOWN) {
-      return;
-    }
-
-    if ($response = $this->sendRequest('post', 'revision')) {
-      return $response->revisionId;
-    }
-
-    return;
-  }
-
-  /**
-   * Get all the revisions from gatsby and create a reference.
-   */
-  public function getRevisions() {
-    if ($this->gatsbyHealth->checkGatsbyHealth() == GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_DOWN) {
-      return;
-    }
-
-    return $this->sendRequest('get', 'revisions');
-  }
-
-  /**
    * Reverting the gatsby build to a revision.
    *
    * @param $revision_number
