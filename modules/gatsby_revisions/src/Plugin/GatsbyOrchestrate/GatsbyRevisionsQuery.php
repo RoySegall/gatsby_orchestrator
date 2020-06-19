@@ -23,7 +23,7 @@ class GatsbyRevisionsQuery extends GatsbyOrchestratePluginBase {
   /**
    * {@inheritDoc}
    */
-  public function trigger() {
+  public function orchestrate() {
     if ($this->gatsbyHealth->checkGatsbyHealth() == GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_DOWN) {
       return;
     }

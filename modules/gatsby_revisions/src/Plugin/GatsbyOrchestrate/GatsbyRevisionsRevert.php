@@ -43,7 +43,7 @@ class GatsbyRevisionsRevert extends GatsbyOrchestratePluginBase {
   /**
    * {@inheritDoc}
    */
-  public function trigger() {
+  public function orchestrate() {
     return $this->sendRequest('post', 'revision-revert/' . $this->revisionNumber);
   }
 

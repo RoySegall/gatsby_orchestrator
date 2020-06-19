@@ -76,7 +76,7 @@ class GatsbyRevisionsSyncRevisions extends ControllerBase {
       $existing_revisions[] = $revision;
     }
 
-    $gatsby_revisions = $this->getRevisionsQuery->trigger();
+    $gatsby_revisions = $this->getRevisionsQuery->orchestrate();
 
     $info = [
       '@skipped' => 0,

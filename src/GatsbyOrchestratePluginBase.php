@@ -33,6 +33,7 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
 
   /**
    * GatsbyOrchestratePluginBase constructor.
+   *
    * @param array $configuration
    * @param $plugin_id
    * @param $plugin_definition
@@ -106,5 +107,5 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
   /**
    * Trigger the action we need to do.
    */
-  abstract function trigger();
+  abstract function orchestrate();
 }
