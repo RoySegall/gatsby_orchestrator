@@ -8,10 +8,9 @@ php:
 #  - 7.2
 
 mysql:
-  database: gatsby_orchestrator
+  database: drupal
   username: root
   password: root
-  encoding: utf8
 
 
 before_install:
@@ -21,7 +20,7 @@ before_install:
   # Coder.
   - composer global require drupal/coder:8.3.9
 
-  - export SIMPLETEST_DB=mysql://root:root@localhost/gatsby_orchestrator
+  - export SIMPLETEST_DB=mysql://root:root@localhost/drupal
 
 install:
   - cd ../
