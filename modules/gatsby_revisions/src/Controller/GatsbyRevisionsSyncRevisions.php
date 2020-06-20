@@ -14,7 +14,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class GatsbyRevisionsSyncRevisions extends ControllerBase {
 
   /**
-   * @var \Drupal\gatsby_revisions\Entity\GatsbyRevisionsQuery
+   * The gatsby revision query plugin object.
+   *
+   * @var \Drupal\gatsby_revisions\Plugin\GatsbyOrchestrate\GatsbyRevisionsQuery
    */
   protected $getRevisionsQuery;
 
@@ -22,6 +24,7 @@ class GatsbyRevisionsSyncRevisions extends ControllerBase {
    * GatsbyRevisionsSyncRevisions constructor.
    *
    * @param \Drupal\gatsby_orchestrator\GatsbyOrchestratePluginManager $gatsby_orchestrator_plugin_manager
+   *   The gatsby orchestrator plugin service.
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
@@ -41,7 +44,7 @@ class GatsbyRevisionsSyncRevisions extends ControllerBase {
   /**
    * Creating a revision.
    *
-   * @param $gatsby_revision
+   * @param mixed $gatsby_revision
    *   The revision identifier from gatsby.
    */
   public function createRevision($gatsby_revision) {

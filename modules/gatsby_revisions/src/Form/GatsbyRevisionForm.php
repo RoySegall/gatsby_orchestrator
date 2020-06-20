@@ -18,12 +18,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class GatsbyRevisionForm extends ContentEntityForm {
 
   /**
+   * The gatsby health service.
+   *
    * @var \Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth
    */
   protected $gatsbyHealth;
 
   /**
-   * @var \Drupal\gatsby_revisions\Entity\GatsbyRevisionCreate
+   * The revision plugin object.
+   *
+   * @var \Drupal\gatsby_revisions\Plugin\GatsbyOrchestrate\GatsbyRevisionCreate
    */
   protected $revisionPlugin;
 
@@ -31,10 +35,15 @@ class GatsbyRevisionForm extends ContentEntityForm {
    * GatsbyRevisionForm constructor.
    *
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   The entity repository.
    * @param \Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth $gatsby_health
+   *   The gatsby health object.
    * @param \Drupal\gatsby_orchestrator\GatsbyOrchestratePluginManager $gatsby_orchestrator_plugin_manager
+   *   The gatsby orchestrate plugin.
    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface|null $entity_type_bundle_info
+   *   The entity type bundle interface service.
    * @param \Drupal\Component\Datetime\TimeInterface|null $time
+   *   The time interface service.
    */
   public function __construct(
     EntityRepositoryInterface $entity_repository,

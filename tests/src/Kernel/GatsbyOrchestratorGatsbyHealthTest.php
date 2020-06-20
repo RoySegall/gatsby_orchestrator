@@ -26,11 +26,15 @@ class GatsbyOrchestratorGatsbyHealthTest extends KernelTestBase {
   public static $modules = ['gatsby_orchestrator'];
 
   /**
+   * The gatsby health.
+   *
    * @var \Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth
    */
   protected $gatsbyHealth;
 
   /**
+   * The messenger service.
+   *
    * @var \Drupal\Tests\gatsby_orchestrator\Kernel\Mocks\MessengerMock
    */
   protected $messenger;

@@ -16,6 +16,8 @@ use Drupal\gatsby_orchestrator\GatsbyOrchestratePluginBase;
 class GatsbyRevisionsRevert extends GatsbyOrchestratePluginBase {
 
   /**
+   * The revision number.
+   *
    * @var int
    */
   protected $revisionNumber;
@@ -23,7 +25,7 @@ class GatsbyRevisionsRevert extends GatsbyOrchestratePluginBase {
   /**
    * Setting the revision number.
    *
-   * @param $revision_number
+   * @param mixed $revision_number
    *   The revision identifier form the gatsby server.
    *
    * @return $this

@@ -32,7 +32,7 @@ install:
 
 script:
   # Run code sniffer.
-#  - /home/travis/.config/composer/vendor/squizlabs/php_codesniffer/bin/phpcs --report=full --standard=/home/travis/.config/composer/vendor/drupal/coder/coder_sniffer/Drupal/ --colors modules/gatsby_orchestrator
+  - /home/travis/.config/composer/vendor/squizlabs/php_codesniffer/bin/phpcs --report=full --standard=/home/travis/.config/composer/vendor/drupal/coder/coder_sniffer/Drupal/ --colors modules/gatsby_orchestrator
 
   # Run tests.
   - cd core

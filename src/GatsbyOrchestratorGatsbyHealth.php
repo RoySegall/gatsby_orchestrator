@@ -8,7 +8,7 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- *
+ * The gatsby healths service.
  */
 class GatsbyOrchestratorGatsbyHealth {
 
@@ -23,14 +23,20 @@ class GatsbyOrchestratorGatsbyHealth {
   const GATSBY_SERVICE_UP = 1;
 
   /**
+   * The address of the gatsby server.
+   *
    * @var string
    */
   protected $address;
 
   /**
+   * Setting the address.
+   *
    * @param string $address
+   *   The address of the gatsby development server.
    *
    * @retun $this
+   *   The current object.
    */
   public function setAddress(string $address) {
     $this->address = $address;
@@ -39,16 +45,22 @@ class GatsbyOrchestratorGatsbyHealth {
   }
 
   /**
+   * The gatsby setting config factory.
+   *
    * @var \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig
    */
   protected $gatsbySettings;
 
   /**
+   * The messenger service.
+   *
    * @var \Drupal\Core\Messenger\MessengerInterface
    */
   protected $messenger;
 
   /**
+   * The http client.
+   *
    * @var \GuzzleHttp\ClientInterface
    */
   protected $httpClient;
@@ -57,8 +69,11 @@ class GatsbyOrchestratorGatsbyHealth {
    * GatsbyRevisionGatsbyHealth constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory service.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger object.
    * @param \GuzzleHttp\ClientInterface $http_client
+   *   The client object.
    */
   public function __construct(ConfigFactoryInterface $config_factory, MessengerInterface $messenger, ClientInterface $http_client) {
     $this->gatsbySettings = $config_factory->get('gatsby.settings');
@@ -67,30 +82,10 @@ class GatsbyOrchestratorGatsbyHealth {
   }
 
   /**
-   * @return \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig
-   */
-  public function getGatsbySettings() {
-    return $this->gatsbySettings;
-  }
-
-  /**
-   * @param \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig $gatsbySettings
-   */
-  public function setGatsbySettings($gatsbySettings) {
-    $this->gatsbySettings = $gatsbySettings;
-
-    return $this;
-  }
-
-  /**
-   * @return \Drupal\Core\Messenger\MessengerInterface
-   */
-  public function getMessenger(): MessengerInterface {
-    return $this->messenger;
-  }
-
-  /**
+   * Setting the messenger object.
+   *
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The service object.
    */
   public function setMessenger(MessengerInterface $messenger) {
     $this->messenger = $messenger;
@@ -99,14 +94,10 @@ class GatsbyOrchestratorGatsbyHealth {
   }
 
   /**
-   * @return \GuzzleHttp\ClientInterface
-   */
-  public function getHttpClient(): ClientInterface {
-    return $this->httpClient;
-  }
-
-  /**
+   * Set the http client.
+   *
    * @param \GuzzleHttp\ClientInterface $httpClient
+   *   The http client.
    */
   public function setHttpClient(ClientInterface $httpClient) {
     $this->httpClient = $httpClient;
@@ -115,7 +106,10 @@ class GatsbyOrchestratorGatsbyHealth {
   }
 
   /**
-   * @return array|mixed|string|null
+   * Get the address of the GatsbyJS server.
+   *
+   * @return string
+   *   The address of the GatsbyJS server.
    */
   public function getAddress() {
 
@@ -130,7 +124,7 @@ class GatsbyOrchestratorGatsbyHealth {
   /**
    * Get the status of the gatsby development service.
    *
-   * @return bool
+   * @return int
    *   True in case the server is up false if not.
    */
   public function checkGatsbyHealth() {

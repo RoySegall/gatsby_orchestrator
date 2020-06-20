@@ -33,6 +33,8 @@ class GatsbyRevisionListBuilder extends EntityListBuilder {
   protected $redirectDestination;
 
   /**
+   * The current account of the user.
+   *
    * @var \Drupal\Core\Session\AccountProxyInterface
    */
   protected $currentAccount;

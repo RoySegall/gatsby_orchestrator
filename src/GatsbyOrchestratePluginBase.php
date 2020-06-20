@@ -14,21 +14,29 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyOrchestrateInterface {
 
   /**
+   * The gatsby settings factory.
+   *
    * @var \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig
    */
   protected $gatsbySettings;
 
   /**
+   * The messenger service.
+   *
    * @var \Drupal\Core\Messenger\Messenger
    */
   protected $messenger;
 
   /**
+   * The http client service.
+   *
    * @var \GuzzleHttp\Client
    */
   protected $httpClient;
 
   /**
+   * The gatsby health service.
+   *
    * @var GatsbyOrchestratorGatsbyHealth
    */
   protected $gatsbyHealth;
@@ -37,17 +45,24 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
    * GatsbyOrchestratePluginBase constructor.
    *
    * @param array $configuration
-   * @param $plugin_id
-   * @param $plugin_definition
+   *   The array configuration.
+   * @param string $plugin_id
+   *   The plugin ID.
+   * @param array $plugin_definition
+   *   The plugin definition.
    * @param \Drupal\Core\Config\ConfigFactory $config_factory
+   *   The config factor service.
    * @param \Drupal\Core\Messenger\Messenger $messenger
+   *   The messenger service.
    * @param \GuzzleHttp\Client $http_client
+   *   The http client service.
    * @param GatsbyOrchestratorGatsbyHealth $gatsby_health
+   *   The gatsby health service.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
-    $plugin_definition,
+    array $plugin_definition,
     ConfigFactory $config_factory,
     Messenger $messenger,
     Client $http_client,
@@ -87,12 +102,13 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
   /**
    * A helper function to send generic requests to gatsby dev server.
    *
-   * @param $method
+   * @param string $method
    *   The method of the request: get, post etc. etc.
-   * @param $endpoint
+   * @param string $endpoint
    *   The endpoint.
    *
-   * @return mixed|void
+   * @return mixed
+   *   Decoded object of the response if not error has happens.
    */
   protected function sendRequest($method, $endpoint) {
     $address = $this->gatsbySettings->get('server_url');
@@ -109,6 +125,9 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
 
   /**
    * Trigger the action we need to do.
+   *
+   * @return mixed
+   *   Any data the plugin desire to return.
    */
   abstract public function orchestrate();
 

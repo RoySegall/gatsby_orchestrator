@@ -13,11 +13,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class GatsbyEventListenerPluginBase extends PluginBase implements GatsbyEventListenerInterface {
 
   /**
+   * The logger service.
+   *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
   protected $logger;
 
   /**
+   * The type manager service.
+   *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
@@ -26,12 +30,17 @@ abstract class GatsbyEventListenerPluginBase extends PluginBase implements Gatsb
    * GatsbyEventListenerPluginBase constructor.
    *
    * @param array $configuration
-   * @param $plugin_id
-   * @param $plugin_definition
+   *   The configuration of the plugin.
+   * @param string $plugin_id
+   *   The plugin ID.
+   * @param array $plugin_definition
+   *   The plugin definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager object.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_channel
+   *   The logger object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, LoggerChannelFactory $logger_channel) {
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityTypeManagerInterface $entity_type_manager, LoggerChannelFactory $logger_channel) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->entityTypeManager = $entity_type_manager;
@@ -62,8 +71,11 @@ abstract class GatsbyEventListenerPluginBase extends PluginBase implements Gatsb
   /**
    * Handling the event.
    *
-   * @param $payload
+   * @param object $payload
    *   The payload we got form the service.
+   *
+   * @return null
+   *   In case something went wrong a null will be returned.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException

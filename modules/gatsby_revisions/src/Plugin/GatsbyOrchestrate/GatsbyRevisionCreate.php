@@ -22,14 +22,14 @@ class GatsbyRevisionCreate extends GatsbyOrchestratePluginBase {
   public function orchestrate() {
 
     if ($this->gatsbyHealth->checkGatsbyHealth() == GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_DOWN) {
-      return;
+      return NULL;
     }
 
     if ($response = $this->sendRequest('post', 'revision')) {
       return $response->revisionId;
     }
 
-    return;
+    return NULL;
   }
 
 }

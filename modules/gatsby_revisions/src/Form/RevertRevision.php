@@ -15,17 +15,28 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class RevertRevision extends ConfirmFormBase {
 
   /**
-   * @var \Drupal\gatsby_revisions\Entity\GatsbyRevisionsRevert
+   * The revert revision plugin.
+   *
+   * @var \Drupal\gatsby_revisions\Plugin\GatsbyOrchestrate\GatsbyRevisionsRevert
    */
   protected $revertRevision;
 
   /**
+   * The entity type manager.
+   *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
   /**
+   * RevertRevision constructor.
    *
+   * @param \Drupal\gatsby_orchestrator\GatsbyOrchestratePluginManager $gatsby_orchestrator_plugin_manager
+   *   The gatsby orchestrator plugin manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function __construct(GatsbyOrchestratePluginManager $gatsby_orchestrator_plugin_manager, EntityTypeManagerInterface $entity_type_manager) {
     $this->revertRevision = $gatsby_orchestrator_plugin_manager->createInstance('revert_revision');

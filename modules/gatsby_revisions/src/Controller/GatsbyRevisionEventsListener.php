@@ -18,6 +18,8 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 class GatsbyRevisionEventsListener extends ControllerBase {
 
   /**
+   * The event plugin manager.
+   *
    * @var \Drupal\gatsby_orchestrator\GatsbyEventListenerPluginManager
    */
   protected $eventPluginManager;
@@ -33,6 +35,7 @@ class GatsbyRevisionEventsListener extends ControllerBase {
    * GatsbyRevisionEventsListener constructor.
    *
    * @param \Drupal\gatsby_orchestrator\GatsbyEventListenerPluginManager $event_plugin_manager
+   *   The gatsby orchestrator plugin manager.
    */
   public function __construct(GatsbyEventListenerPluginManager $event_plugin_manager) {
     $this->eventPluginManager = $event_plugin_manager;
