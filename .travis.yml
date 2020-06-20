@@ -10,7 +10,7 @@ php:
 mysql:
   database: drupal
   username: root
-  password: root
+  encoding: utf8
 
 
 before_install:
@@ -19,8 +19,8 @@ before_install:
 
   # Coder.
   - composer global require drupal/coder:8.3.9
-
-  - export SIMPLETEST_DB=mysql://root:root@localhost/drupal
+  - mysql -e 'create database og'
+  - export SIMPLETEST_DB=mysql://root:@127.0.0.1/drupal
 
 install:
   - cd ../
