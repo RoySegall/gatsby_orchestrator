@@ -30,7 +30,7 @@ script:
   - pwd
 
   # Run code sniffer.
-  - phpcs --report=full --standard=/home/travis/.config/composer/vendor/drupal/coder/coder_sniffer/Drupal/ modules/gatsby_orchestrator
+  - /home/travis/.config/composer/vendor/squizlabs/php_codesniffer/bin/phpcs --report=full --standard=/home/travis/.config/composer/vendor/drupal/coder/coder_sniffer/Drupal/ modules/gatsby_orchestrator
 #
 #  # Drupal "SimpleTests" via run-tests.sh
 #  - cd $TRAVIS_BUILD_DIR/drupal
