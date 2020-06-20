@@ -2,12 +2,14 @@
 
 namespace Drupal\gatsby_orchestrator;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Messenger\Messenger;
-use Drupal\Core\Messenger\MessengerInterface;
 use GuzzleHttp\ClientInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ *
+ */
 class GatsbyOrchestratorGatsbyHealth {
 
   /**
@@ -42,7 +44,7 @@ class GatsbyOrchestratorGatsbyHealth {
   protected $gatsbySettings;
 
   /**
-   * @var MessengerInterface
+   * @var \Drupal\Core\Messenger\MessengerInterface
    */
   protected $messenger;
 
@@ -58,7 +60,7 @@ class GatsbyOrchestratorGatsbyHealth {
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    * @param \GuzzleHttp\ClientInterface $http_client
    */
-  public function __construct(\Drupal\Core\Config\ConfigFactoryInterface $config_factory, MessengerInterface $messenger, \GuzzleHttp\ClientInterface $http_client) {
+  public function __construct(ConfigFactoryInterface $config_factory, MessengerInterface $messenger, ClientInterface $http_client) {
     $this->gatsbySettings = $config_factory->get('gatsby.settings');
     $this->messenger = $messenger;
     $this->httpClient = $http_client;
@@ -81,14 +83,14 @@ class GatsbyOrchestratorGatsbyHealth {
   }
 
   /**
-   * @return MessengerInterface
+   * @return \Drupal\Core\Messenger\MessengerInterface
    */
   public function getMessenger(): MessengerInterface {
     return $this->messenger;
   }
 
   /**
-   * @param MessengerInterface $messenger
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    */
   public function setMessenger(MessengerInterface $messenger) {
     $this->messenger = $messenger;
@@ -99,14 +101,14 @@ class GatsbyOrchestratorGatsbyHealth {
   /**
    * @return \GuzzleHttp\ClientInterface
    */
-  public function getHttpClient(): \GuzzleHttp\ClientInterface {
+  public function getHttpClient(): ClientInterface {
     return $this->httpClient;
   }
 
   /**
    * @param \GuzzleHttp\ClientInterface $httpClient
    */
-  public function setHttpClient(\GuzzleHttp\ClientInterface $httpClient) {
+  public function setHttpClient(ClientInterface $httpClient) {
     $this->httpClient = $httpClient;
 
     return $this;
@@ -129,7 +131,7 @@ class GatsbyOrchestratorGatsbyHealth {
    * Get the status of the gatsby development service.
    *
    * @return bool
-   *  True in case the server is up false if not.
+   *   True in case the server is up false if not.
    */
   public function checkGatsbyHealth() {
     $address = $this->getAddress();
@@ -147,7 +149,8 @@ class GatsbyOrchestratorGatsbyHealth {
       }
 
       return self::GATSBY_SERVICE_DOWN;
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       $this->messenger->addError($e->getMessage());
       return self::GATSBY_SERVICE_DOWN;
     }

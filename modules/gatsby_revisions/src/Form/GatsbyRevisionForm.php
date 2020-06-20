@@ -10,7 +10,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\gatsby_orchestrator\GatsbyOrchestratePluginManager;
 use Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth;
 use Drupal\gatsby_revisions\Entity\GatsbyRevision;
-use Drupal\gatsby_revisions\Plugin\GatsbyOrchestrate\GatsbyRevisionCreate;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -19,23 +18,23 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class GatsbyRevisionForm extends ContentEntityForm {
 
   /**
-   * @var GatsbyOrchestratorGatsbyHealth
+   * @var \Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth
    */
   protected $gatsbyHealth;
 
   /**
-   * @var GatsbyRevisionCreate
+   * @var \Drupal\gatsby_revisions\Entity\GatsbyRevisionCreate
    */
   protected $revisionPlugin;
 
   /**
    * GatsbyRevisionForm constructor.
    *
-   * @param EntityRepositoryInterface $entity_repository
-   * @param GatsbyOrchestratorGatsbyHealth $gatsby_health
-   * @param GatsbyOrchestratePluginManager $gatsby_orchestrator_plugin_manager
-   * @param EntityTypeBundleInfoInterface|null $entity_type_bundle_info
-   * @param TimeInterface|null $time
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   * @param \Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth $gatsby_health
+   * @param \Drupal\gatsby_orchestrator\GatsbyOrchestratePluginManager $gatsby_orchestrator_plugin_manager
+   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface|null $entity_type_bundle_info
+   * @param \Drupal\Component\Datetime\TimeInterface|null $time
    */
   public function __construct(
     EntityRepositoryInterface $entity_repository,
@@ -69,7 +68,7 @@ class GatsbyRevisionForm extends ContentEntityForm {
   public function actions(array $form, FormStateInterface $form_state) {
     $actions = parent::actions($form, $form_state);
 
-    # If the service is alive then
+    // If the service is alive then.
     $actions['submit']['#disabled'] = $this->gatsbyHealth->checkGatsbyHealth() == GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_DOWN;
 
     return $actions;

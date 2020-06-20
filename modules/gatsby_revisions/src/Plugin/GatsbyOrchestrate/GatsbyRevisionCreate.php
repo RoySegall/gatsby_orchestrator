@@ -2,12 +2,8 @@
 
 namespace Drupal\gatsby_revisions\Plugin\GatsbyOrchestrate;
 
-use Drupal\gatsby_orchestrator\GatsbyOrchestrateInterface;
-
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\gatsby_orchestrator\GatsbyOrchestratePluginBase;
 use Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the gatsby_orchestrate.

@@ -2,6 +2,7 @@
 
 namespace Drupal\gatsby_revisions;
 
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Datetime\DateFormatterInterface;
@@ -48,9 +49,9 @@ class GatsbyRevisionListBuilder extends EntityListBuilder {
    * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect_destination
    *   The redirect destination service.
    * @param \Drupal\Core\Session\AccountProxyInterface $currect_account
-   *  The account service.
+   *   The account service.
    */
-  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, DateFormatterInterface $date_formatter, RedirectDestinationInterface $redirect_destination, \Drupal\Core\Session\AccountProxyInterface $currect_account) {
+  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, DateFormatterInterface $date_formatter, RedirectDestinationInterface $redirect_destination, AccountProxyInterface $currect_account) {
     parent::__construct($entity_type, $storage);
     $this->dateFormatter = $date_formatter;
     $this->redirectDestination = $redirect_destination;

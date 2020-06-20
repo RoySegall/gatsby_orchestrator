@@ -2,6 +2,8 @@
 
 namespace Drupal\gatsby_orchestrator;
 
+use GuzzleHttp\Client;
+use Drupal\Core\Config\ConfigFactory;
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Messenger\Messenger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -17,7 +19,7 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
   protected $gatsbySettings;
 
   /**
-   * @var Messenger
+   * @var \Drupal\Core\Messenger\Messenger
    */
   protected $messenger;
 
@@ -38,7 +40,7 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
    * @param $plugin_id
    * @param $plugin_definition
    * @param \Drupal\Core\Config\ConfigFactory $config_factory
-   * @param Messenger $messenger
+   * @param \Drupal\Core\Messenger\Messenger $messenger
    * @param \GuzzleHttp\Client $http_client
    * @param GatsbyOrchestratorGatsbyHealth $gatsby_health
    */
@@ -46,9 +48,9 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    \Drupal\Core\Config\ConfigFactory $config_factory,
+    ConfigFactory $config_factory,
     Messenger $messenger,
-    \GuzzleHttp\Client $http_client,
+    Client $http_client,
     GatsbyOrchestratorGatsbyHealth $gatsby_health
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -86,9 +88,9 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
    * A helper function to send generic requests to gatsby dev server.
    *
    * @param $method
-   *  The method of the request: get, post etc. etc.
+   *   The method of the request: get, post etc. etc.
    * @param $endpoint
-   *  The endpoint.
+   *   The endpoint.
    *
    * @return mixed|void
    */
@@ -98,7 +100,8 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
     try {
       $response = $this->httpClient->{$method}($address . $endpoint);
       return json_decode($response->getBody()->getContents());
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       $this->messenger->addError($e->getMessage());
       return;
     }
@@ -107,5 +110,6 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
   /**
    * Trigger the action we need to do.
    */
-  abstract function orchestrate();
+  abstract public function orchestrate();
+
 }

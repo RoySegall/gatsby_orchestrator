@@ -2,10 +2,10 @@
 
 namespace Drupal\gatsby_revisions\Controller;
 
+use Drupal\Core\Url;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\gatsby_orchestrator\GatsbyOrchestratePluginManager;
 use Drupal\gatsby_revisions\Entity\GatsbyRevision;
-use Drupal\gatsby_revisions\Plugin\GatsbyOrchestrate\GatsbyRevisionsQuery;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -14,14 +14,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class GatsbyRevisionsSyncRevisions extends ControllerBase {
 
   /**
-   * @var GatsbyRevisionsQuery
+   * @var \Drupal\gatsby_revisions\Entity\GatsbyRevisionsQuery
    */
   protected $getRevisionsQuery;
 
   /**
    * GatsbyRevisionsSyncRevisions constructor.
    *
-   * @param GatsbyOrchestratePluginManager $gatsby_orchestrator_plugin_manager
+   * @param \Drupal\gatsby_orchestrator\GatsbyOrchestratePluginManager $gatsby_orchestrator_plugin_manager
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
@@ -42,7 +42,7 @@ class GatsbyRevisionsSyncRevisions extends ControllerBase {
    * Creating a revision.
    *
    * @param $gatsby_revision
-   *  The revision identifier from gatsby.
+   *   The revision identifier from gatsby.
    */
   public function createRevision($gatsby_revision) {
     $values = [
@@ -80,12 +80,12 @@ class GatsbyRevisionsSyncRevisions extends ControllerBase {
 
     $info = [
       '@skipped' => 0,
-      '@created' => 0
+      '@created' => 0,
     ];
 
     foreach ($gatsby_revisions as $gatsby_revision) {
 
-      if (!in_array((string)$gatsby_revision, $existing_revisions)) {
+      if (!in_array((string) $gatsby_revision, $existing_revisions)) {
         $info['@created']++;
         $this->createRevision($gatsby_revision);
       }
@@ -94,7 +94,7 @@ class GatsbyRevisionsSyncRevisions extends ControllerBase {
       }
     }
 
-    $second_info['@href'] = \Drupal\Core\Url::fromRoute('entity.gatsby_revision.collection')->setAbsolute()->toString();
+    $second_info['@href'] = Url::fromRoute('entity.gatsby_revision.collection')->setAbsolute()->toString();
 
     $markup = $this->t('Revision were synced. @created item(s) were created. @skipped item(s) already exists thus were skipped.', $info);
     $markup .= $this->t('Go back to the list of revision <a href="@href">revision pages</a>.', $second_info);

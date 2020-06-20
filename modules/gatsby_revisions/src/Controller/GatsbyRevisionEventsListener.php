@@ -6,8 +6,6 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\gatsby_orchestrator\GatsbyEventListenerPluginManager;
-use Drupal\gatsby_revisions\Entity\GatsbyRevision;
-use Drupal\gatsby_revisions\Plugin\GatsbyEventListener\GatsbyRevisionCreation;
 use Laminas\Diactoros\Response\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +18,7 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 class GatsbyRevisionEventsListener extends ControllerBase {
 
   /**
-   * @var GatsbyEventListenerPluginManager
+   * @var \Drupal\gatsby_orchestrator\GatsbyEventListenerPluginManager
    */
   protected $eventPluginManager;
 
@@ -34,7 +32,7 @@ class GatsbyRevisionEventsListener extends ControllerBase {
   /**
    * GatsbyRevisionEventsListener constructor.
    *
-   * @param GatsbyEventListenerPluginManager $event_plugin_manager
+   * @param \Drupal\gatsby_orchestrator\GatsbyEventListenerPluginManager $event_plugin_manager
    */
   public function __construct(GatsbyEventListenerPluginManager $event_plugin_manager) {
     $this->eventPluginManager = $event_plugin_manager;
@@ -65,7 +63,7 @@ class GatsbyRevisionEventsListener extends ControllerBase {
 
     $decoded_content = json_decode(\Drupal::request()->getContent());
 
-    /** @var GatsbyRevisionCreation $plugin */
+    /** @var \Drupal\gatsby_revisions\Entity\GatsbyRevisionCreation $plugin */
     $plugin = $this->eventPluginManager->createInstance($decoded_content->event);
 
     $plugin->handle($decoded_content);

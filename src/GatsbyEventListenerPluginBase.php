@@ -18,7 +18,7 @@ abstract class GatsbyEventListenerPluginBase extends PluginBase implements Gatsb
   protected $logger;
 
   /**
-   * @var EntityTypeManagerInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
@@ -28,8 +28,8 @@ abstract class GatsbyEventListenerPluginBase extends PluginBase implements Gatsb
    * @param array $configuration
    * @param $plugin_id
    * @param $plugin_definition
-   * @param EntityTypeManagerInterface $entity_type_manager
-   * @param LoggerChannelFactory $logger_channel
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_channel
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, LoggerChannelFactory $logger_channel) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -63,12 +63,12 @@ abstract class GatsbyEventListenerPluginBase extends PluginBase implements Gatsb
    * Handling the event.
    *
    * @param $payload
-   *  The payload we got form the service.
+   *   The payload we got form the service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  abstract function handle($payload);
+  abstract public function handle($payload);
 
 }

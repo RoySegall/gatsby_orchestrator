@@ -66,7 +66,7 @@ class GatsbyRevision extends ContentEntityBase implements GatsbyRevisionInterfac
    * Get a list of all the state for the gatsby revision build mode.
    *
    * @return array
-   *  List of key-label for the status of the revision state.
+   *   List of key-label for the status of the revision state.
    */
   public static function getStatuses() {
     return [

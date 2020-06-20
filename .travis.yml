@@ -26,22 +26,10 @@ install:
   - cd drupal && composer install
 
 script:
-  - ls -al
-  - pwd
-
   # Run code sniffer.
-  - /home/travis/.config/composer/vendor/squizlabs/php_codesniffer/bin/phpcs --report=full --standard=/home/travis/.config/composer/vendor/drupal/coder/coder_sniffer/Drupal/ modules/gatsby_orchestrator
-#
-#  # Drupal "SimpleTests" via run-tests.sh
-#  - cd $TRAVIS_BUILD_DIR/drupal
-#  - php core/scripts/run-tests.sh --verbose --color --module $MODULE_NAME --php $(which php) --url http://127.0.0.1:8080
-#
-#  # PHP Unit Tests
-#  - cd $TRAVIS_BUILD_DIR/drupal
-#  - phpunit -c core/phpunit.xml.dist modules/$MODULE_NAME --debug --testdox
-#
-#
-#  # Behat Tests - RUN THESE LAST OTHERWISE PHPUNIT WILL FAIL BECAUSE OF DEPENDENCY CONFLICTS
-#  - cd $TRAVIS_BUILD_DIR/drupal/modules/$MODULE_NAME
-#  - composer install
-#  - vendor/bin/behat --config tests/behat/behat.yml
+#  - /home/travis/.config/composer/vendor/squizlabs/php_codesniffer/bin/phpcs --report=full --standard=/home/travis/.config/composer/vendor/drupal/coder/coder_sniffer/Drupal/ --colors modules/gatsby_orchestrator
+
+  # Run tests.
+  - cd core
+  - ls ../modules/
+  - ../vendor/bin/phpunit ../modules/gatsby_orchestrator

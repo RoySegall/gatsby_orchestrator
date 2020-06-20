@@ -26,12 +26,12 @@ class GatsbyOrchestratorGatsbyHealthTest extends KernelTestBase {
   public static $modules = ['gatsby_orchestrator'];
 
   /**
-   * @var GatsbyOrchestratorGatsbyHealth
+   * @var \Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth
    */
   protected $gatsbyHealth;
 
   /**
-   * @var MessengerMock
+   * @var \Drupal\Tests\gatsby_orchestrator\Kernel\Mocks\MessengerMock
    */
   protected $messenger;
 
@@ -75,7 +75,7 @@ class GatsbyOrchestratorGatsbyHealthTest extends KernelTestBase {
       ->checkGatsbyHealth();
 
     $this->assertEquals(GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_DOWN, $results);
-    $this->assertEquals( "Error Communicating with Server", $this->messenger->errors[1]);
+    $this->assertEquals("Error Communicating with Server", $this->messenger->errors[1]);
 
     // Wait for a successful request.
     $results = $this->gatsbyHealth->checkGatsbyHealth();

@@ -4,7 +4,6 @@ namespace Drupal\gatsby_revisions\Plugin\GatsbyEventListener;
 
 use Drupal\gatsby_orchestrator\GatsbyEventListenerPluginBase;
 use Drupal\gatsby_revisions\Entity\GatsbyRevision;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the gatsby_event_listener.
@@ -20,7 +19,7 @@ class GatsbyRevisionCreation extends GatsbyEventListenerPluginBase {
   /**
    * {@inheritDoc}
    */
-  function handle($payload) {
+  public function handle($payload) {
     $storage = $this->entityTypeManager->getStorage('gatsby_revision');
 
     $gatsby_revision_ids = $storage
@@ -36,13 +35,14 @@ class GatsbyRevisionCreation extends GatsbyEventListenerPluginBase {
       return;
     }
 
-    /** @var GatsbyRevision $gatsby_revision */
+    /** @var \Drupal\gatsby_revisions\Entity\GatsbyRevision $gatsby_revision */
     $gatsby_revision = $storage->load(reset($gatsby_revision_ids));
 
     if ($payload->status == 'succeeded') {
       $gatsby_revision->set('status', GatsbyRevision::STATUS_PASSED);
       $this->logger->info('The gatsby revision, @title, set with the status success.', ['@title' => $gatsby_revision->label()]);
-    } else {
+    }
+    else {
       $gatsby_revision->set('status', GatsbyRevision::STATUS_FAILED);
       $gatsby_revision->set('error', $payload->data);
 
@@ -56,4 +56,5 @@ class GatsbyRevisionCreation extends GatsbyEventListenerPluginBase {
 
     $gatsby_revision->save();
   }
+
 }
