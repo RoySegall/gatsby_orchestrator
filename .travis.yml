@@ -22,7 +22,7 @@ before_install:
 install:
   - cd ../
   - git clone --branch 8.9.x https://git.drupalcode.org/project/drupal.git
-  - mv -r gatsby_orchestrator drupal/modules/gatsby_orchestrator
+  - mv gatsby_orchestrator drupal/modules/gatsby_orchestrator
   - cd drupal && composer install
 
 script:
