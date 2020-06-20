@@ -19,7 +19,7 @@ before_install:
   # Coder.
   - composer global require drupal/coder:8.3.9
   - ls -al /home/travis/.config/composer/vendor
-  - ln -s /home/travis/.config/composer/drupal/coder/coder_sniffer/Drupal /home/travis/.config/composer/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/
+  - ln -s /home/travis/.config/composer/vendor/drupal/coder/coder_sniffer/Drupal /home/travis/.config/composer/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/
 
 install:
   - git clone --branch 8.9.x https://git.drupalcode.org/project/drupal.git
