@@ -19,7 +19,7 @@ before_install:
 
   # Coder.
   - composer global require drupal/coder:8.3.9
-  - mysql -e 'create database og'
+  - mysql -e 'create database drupal'
   - export SIMPLETEST_DB=mysql://root:@127.0.0.1/drupal
 
 install:
