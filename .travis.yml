@@ -20,27 +20,17 @@ before_install:
   - composer global require drupal/coder:8.3.9
 
 install:
+  - cd ../
   - git clone --branch 8.9.x https://git.drupalcode.org/project/drupal.git
-#  - cd drupal && composer install && cd -
-#  - mkdir -p drupal/modules/$MODULE_NAME
-#
-#  # switched to doing it this way because it makes local testing a bit easier.
-#  # create symbolic links to all of the files/folders in the module directory
-#  - for d in $(pwd)/*; do ln -s "$d" "drupal/modules/$MODULE_NAME"; done
-#
-#  # remove the recursive drupal folder from the symlinks
-#  - rm -f drupal/modules/$MODULE_NAME/drupal
-#
-#  - cd drupal
+  - mv -r gatsby_orchestrator drupal/modules/gatsby_orchestrator
+  - cd drupal && composer install
 
 script:
   - ls -al
-  - /home/travis/.config/composer/vendor/squizlabs/php_codesniffer/bin/phpcs --standard=/home/travis/.config/composer/vendor/drupal/coder/coder_sniffer/Drupal/ .
+  - pwd
 
-
-#  # Run code sniffer.
-#  # Warnings are disabled until the SMS notifier is ported.
-#  - phpcs --report=full --standard=Drupal --warning-severity=0 $TRAVIS_BUILD_DIR/drupal/modules/$MODULE_NAME --ignore=bin,*.css,gulpfile.js,libraries,modules/contrib,vendor
+  # Run code sniffer.
+  - phpcs --report=full --standard=/home/travis/.config/composer/vendor/drupal/coder/coder_sniffer/Drupal/ modules/gatsby_orchestrator
 #
 #  # Drupal "SimpleTests" via run-tests.sh
 #  - cd $TRAVIS_BUILD_DIR/drupal
