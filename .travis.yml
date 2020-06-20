@@ -37,6 +37,7 @@ install:
 script:
   - ls - al
 
+
 #  # Run code sniffer.
 #  # Warnings are disabled until the SMS notifier is ported.
 #  - phpcs --report=full --standard=Drupal --warning-severity=0 $TRAVIS_BUILD_DIR/drupal/modules/$MODULE_NAME --ignore=bin,*.css,gulpfile.js,libraries,modules/contrib,vendor
