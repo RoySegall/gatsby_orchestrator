@@ -21,7 +21,8 @@ class GatsbyRevisionsRevertTest extends KernelTestBase {
    */
   protected function setUp() {
     parent::setUp();
-    // Mock required services here.
+
+    $this->foo = 'bar';
   }
 
   /**

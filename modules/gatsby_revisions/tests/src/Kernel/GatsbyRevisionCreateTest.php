@@ -21,6 +21,8 @@ class GatsbyRevisionCreateTest extends KernelTestBase {
    */
   protected function setUp() {
     parent::setUp();
+
+    $this->foo = 'bar';
   }
 
   /**

@@ -21,7 +21,8 @@ class GatsbyRevisionsQueryTest extends KernelTestBase {
    */
   protected function setUp() {
     parent::setUp();
-    // Mock required services here.
+
+    $this->foo = 'bar';
   }
 
   /**
@@ -37,4 +38,5 @@ class GatsbyRevisionsQueryTest extends KernelTestBase {
   public function testRequestSendingWhenServiceIsUp() {
     $this->pass('TBD');
   }
+
 }
