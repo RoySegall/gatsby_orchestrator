@@ -10,8 +10,8 @@ use Drupal\gatsby_revisions\Entity\GatsbyRevision;
  *
  * @GatsbyEventListener(
  *   id = "revision_creation",
- *   label = @Translation("Foo"),
- *   description = @Translation("Foo description.")
+ *   label = @Translation("Revision creation"),
+ *   description = @Translation("Handelign event when the revision creation event has sent.")
  * )
  */
 class GatsbyRevisionCreation extends GatsbyEventListenerPluginBase {
@@ -31,7 +31,7 @@ class GatsbyRevisionCreation extends GatsbyEventListenerPluginBase {
       $params = [
         '@id' => $payload->revisionId,
       ];
-      $this->logger->error('A notification for the gatsby revision with the ID @id was sent but there is no record in the DB for a revision like that', $params);
+      $this->logger->error(t('A notification for the gatsby revision with the ID @id was sent but there is no record in the DB for a revision like that', $params));
       return;
     }
 

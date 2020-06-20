@@ -61,9 +61,9 @@ class GatsbyOrchestratorGatsbyHealthTest extends KernelTestBase {
   }
 
   /**
-   * Test callback.
+   * Testing the scenarios of getting the health of the gatsby service.
    */
-  public function testSomething() {
+  public function testHealthOfTheGatsbyServer() {
     // Send a request without an address and make sure we an error is tracked.
     $this->gatsbyHealth->checkGatsbyHealth();
 

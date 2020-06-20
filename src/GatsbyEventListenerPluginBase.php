@@ -5,6 +5,7 @@ namespace Drupal\gatsby_orchestrator;
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -18,6 +19,21 @@ abstract class GatsbyEventListenerPluginBase extends PluginBase implements Gatsb
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
   protected $logger;
+
+  /**
+   * Setting the logger service.
+   *
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The mock service.
+   *
+   * @return GatsbyEventListenerPluginBase
+   *   The current object.
+   */
+  public function setLogger(LoggerChannelInterface $logger) {
+    $this->logger = $logger;
+
+    return $this;
+  }
 
   /**
    * The type manager service.
