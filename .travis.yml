@@ -1,0 +1,56 @@
+language: php
+
+sudo: false
+
+php:
+  - 7.4
+#  - 7.3
+#  - 7.2
+
+mysql:
+  database: drupal
+  username: root
+  encoding: utf8
+
+before_install:
+  # Codesniffer.
+  - composer global require squizlabs/php_codesniffer:3.5.5
+
+  # Coder.
+  - composer global require drupal/coder:8.3.9
+  - ln -s ~/.composer/vendor/drupal/coder/coder_sniffer/Drupal ~/.composer/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/
+
+install:
+  - git clone --branch 8.9.x https://git.drupalcode.org/project/drupal.git
+#  - cd drupal && composer install && cd -
+#  - mkdir -p drupal/modules/$MODULE_NAME
+#
+#  # switched to doing it this way because it makes local testing a bit easier.
+#  # create symbolic links to all of the files/folders in the module directory
+#  - for d in $(pwd)/*; do ln -s "$d" "drupal/modules/$MODULE_NAME"; done
+#
+#  # remove the recursive drupal folder from the symlinks
+#  - rm -f drupal/modules/$MODULE_NAME/drupal
+#
+#  - cd drupal
+
+script:
+  - ls - al
+
+#  # Run code sniffer.
+#  # Warnings are disabled until the SMS notifier is ported.
+#  - phpcs --report=full --standard=Drupal --warning-severity=0 $TRAVIS_BUILD_DIR/drupal/modules/$MODULE_NAME --ignore=bin,*.css,gulpfile.js,libraries,modules/contrib,vendor
+#
+#  # Drupal "SimpleTests" via run-tests.sh
+#  - cd $TRAVIS_BUILD_DIR/drupal
+#  - php core/scripts/run-tests.sh --verbose --color --module $MODULE_NAME --php $(which php) --url http://127.0.0.1:8080
+#
+#  # PHP Unit Tests
+#  - cd $TRAVIS_BUILD_DIR/drupal
+#  - phpunit -c core/phpunit.xml.dist modules/$MODULE_NAME --debug --testdox
+#
+#
+#  # Behat Tests - RUN THESE LAST OTHERWISE PHPUNIT WILL FAIL BECAUSE OF DEPENDENCY CONFLICTS
+#  - cd $TRAVIS_BUILD_DIR/drupal/modules/$MODULE_NAME
+#  - composer install
+#  - vendor/bin/behat --config tests/behat/behat.yml
