@@ -34,6 +34,7 @@ install:
 #  - cd drupal
 
 script:
+  - ls -al
   - /home/travis/.config/composer/vendor/squizlabs/php_codesniffer/bin/phpcs --standard=/home/travis/.config/composer/vendor/drupal/coder/coder_sniffer/Drupal/ .
 
 
