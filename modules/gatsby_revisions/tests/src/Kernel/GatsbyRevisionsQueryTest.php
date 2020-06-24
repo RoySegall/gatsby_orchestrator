@@ -69,6 +69,37 @@ class GatsbyRevisionsQueryTest extends KernelTestBase {
   }
 
   /**
+   * Testing when gatsby is up but the server returned a bad response.
+   */
+  public function testRequestSendingWhenServiceIsUpAndErroredResponse() {
+    $this->gatsbyHealthMock
+      ->expects($this->once())
+      ->method('checkGatsbyHealth')
+      ->will($this->returnValue(GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_UP));
+
+    $this->gatsbySettingsMock
+      ->expects($this->once())
+      ->method('get')
+      ->with('server_url')
+      ->willReturn('dummy_address');
+
+    $this
+      ->messengerMock
+      ->expects($this->once())
+      ->method('addError')
+      ->with('Error Communicating with Server');
+
+    $mock = new MockHandler([
+      new RequestException('Error Communicating with Server', new Request('GET', 'test')),
+    ]);
+
+    $handlerStack = HandlerStack::create($mock);
+    $client = new Client(['handler' => $handlerStack]);
+
+    $this->assertEmpty($this->revisionQueryHandler->setHttpClient($client)->orchestrate());
+  }
+
+  /**
    * Testing when gatsby is up but the server return good response.
    */
   public function testRequestSendingWhenServiceIsUpAndValidResponse() {
@@ -101,37 +132,6 @@ class GatsbyRevisionsQueryTest extends KernelTestBase {
       ->orchestrate();
 
     $this->assertEqual('bar', $response->foo);
-  }
-
-  /**
-   * Testing when gatsby is up but the server returned a bad response.
-   */
-  public function testRequestSendingWhenServiceIsUpAndErroredResponse() {
-    $this->gatsbyHealthMock
-      ->expects($this->once())
-      ->method('checkGatsbyHealth')
-      ->will($this->returnValue(GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_UP));
-
-    $this->gatsbySettingsMock
-      ->expects($this->once())
-      ->method('get')
-      ->with('server_url')
-      ->willReturn('dummy_address');
-
-    $this
-      ->messengerMock
-      ->expects($this->once())
-      ->method('addError')
-      ->with('Error Communicating with Server');
-
-    $mock = new MockHandler([
-      new RequestException('Error Communicating with Server', new Request('GET', 'test')),
-    ]);
-
-    $handlerStack = HandlerStack::create($mock);
-    $client = new Client(['handler' => $handlerStack]);
-
-    $this->assertEmpty($this->revisionQueryHandler->setHttpClient($client)->orchestrate());
   }
 
 }

@@ -5,6 +5,7 @@ namespace Drupal\Tests\gatsby_revisions\Kernel;
 use Drupal\gatsby_revisions\Entity\GatsbyRevision;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\gatsby_orchestrator\Kernel\Mocks\LoggerMock;
+use Drupal\Tests\gatsby_orchestrator\Kernel\MockTraits;
 
 /**
  * Test description.
@@ -12,6 +13,8 @@ use Drupal\Tests\gatsby_orchestrator\Kernel\Mocks\LoggerMock;
  * @group gatsby_revisions
  */
 class GatsbyRevisionEventListenerTest extends KernelTestBase {
+
+  use MockTraits;
 
   /**
    * {@inheritdoc}

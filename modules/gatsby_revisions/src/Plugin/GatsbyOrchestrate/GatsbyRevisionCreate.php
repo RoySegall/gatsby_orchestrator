@@ -10,7 +10,7 @@ use Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth;
  *
  * @GatsbyOrchestrate(
  *   id = "create_revision",
- *   label = @Translation("Create. revision"),
+ *   label = @Translation("Create revision"),
  *   description = @Translation("Creating a revision in the server")
  * )
  */
