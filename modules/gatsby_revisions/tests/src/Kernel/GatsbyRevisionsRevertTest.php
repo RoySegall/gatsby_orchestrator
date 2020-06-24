@@ -3,6 +3,7 @@
 namespace Drupal\Tests\gatsby_revisions\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\gatsby_orchestrator\Kernel\MockTraits;
 
 /**
  * Testing the GatsbyRevisionsRevert plugin.
@@ -10,6 +11,8 @@ use Drupal\KernelTests\KernelTestBase;
  * @group gatsby_revisions
  */
 class GatsbyRevisionsRevertTest extends KernelTestBase {
+
+  use MockTraits;
 
   /**
    * {@inheritdoc}

@@ -46,7 +46,7 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
   /**
    * Setting the messenger service.
    *
-   * @param MessengerInterface $messenger
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger object.
    *
    * @return GatsbyOrchestratePluginBase
@@ -61,7 +61,7 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
   /**
    * Setting the client service.
    *
-   * @param Client $httpClient
+   * @param \GuzzleHttp\Client $httpClient
    *   The client object.
    *
    * @return GatsbyOrchestratePluginBase

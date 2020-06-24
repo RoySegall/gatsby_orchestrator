@@ -2,12 +2,9 @@
 
 namespace Drupal\Tests\gatsby_revisions\Kernel;
 
-use Drupal\Core\Config\Config;
 use Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth;
-use Drupal\gatsby_revisions\Plugin\GatsbyOrchestrate\GatsbyRevisionsQuery;
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\Tests\gatsby_orchestrator\Kernel\Mocks\LoggerMock;
-use Drupal\Tests\gatsby_orchestrator\Kernel\Mocks\MessengerMock;
+use Drupal\Tests\gatsby_orchestrator\Kernel\MockTraits;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\MockHandler;
@@ -22,6 +19,8 @@ use GuzzleHttp\Psr7\Response;
  */
 class GatsbyRevisionsQueryTest extends KernelTestBase {
 
+  use MockTraits;
+
   /**
    * {@inheritdoc}
    */
@@ -34,28 +33,9 @@ class GatsbyRevisionsQueryTest extends KernelTestBase {
   /**
    * The revision query object.
    *
-   * @var GatsbyRevisionsQuery
+   * @var \Drupal\gatsby_revisions\Plugin\GatsbyOrchestrate\GatsbyRevisionsQuery
    */
   protected $revisionQueryHandler;
-
-  /**
-   * The mocked messenger object.
-   *
-   * @var MessengerMock
-   */
-  protected $messengerMock;
-
-  /**
-   * The gatsby service mock.
-   *
-   * @var \PHPUnit\Framework\MockObject\MockObject|GatsbyOrchestratorGatsbyHealth
-   */
-  public $gatsbyMock;
-
-  /**
-   * @var \PHPUnit\Framework\MockObject\MockObject|\Drupal\Core\Config\Config
-   */
-  public $gatsbySettingsMock;
 
   /**
    * {@inheritdoc}
@@ -67,21 +47,10 @@ class GatsbyRevisionsQueryTest extends KernelTestBase {
     $event_listener_plugin = $this->container->get('plugin.manager.gatsby_orchestrate');
     $this->revisionQueryHandler = $event_listener_plugin->createInstance('get_revisions');
 
-    $this->gatsbyMock = $this
-      ->getMockBuilder(GatsbyOrchestratorGatsbyHealth::class)
-      ->disableOriginalConstructor()
-      ->getMock();
-
-    $this->gatsbySettingsMock = $this
-      ->getMockBuilder(Config::class)
-      ->disableOriginalConstructor()
-      ->getMock();
-
-    $this->messengerMock = new MessengerMock();
     $this->revisionQueryHandler
-      ->setGatsbyHealth($this->gatsbyMock)
-      ->setGatsbySettings($this->gatsbySettingsMock)
-      ->setMessenger($this->messengerMock);
+      ->setGatsbyHealth($this->setGatsbyHealthMock())
+      ->setGatsbySettings($this->setGatsbySettingsMock())
+      ->setMessenger($this->setMessengerMock());
   }
 
   /**
@@ -89,7 +58,7 @@ class GatsbyRevisionsQueryTest extends KernelTestBase {
    */
   public function testRequestSendingWhenServiceIsDown() {
 
-    $this->gatsbyMock
+    $this->gatsbyHealthMock
       ->expects($this->once())
       ->method('checkGatsbyHealth')
       ->will($this->returnValue(GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_DOWN));
@@ -100,10 +69,10 @@ class GatsbyRevisionsQueryTest extends KernelTestBase {
   }
 
   /**
-   * Testing no request will be send when gatsby is up but the server return good response.
+   * Testing when gatsby is up but the server return good response.
    */
   public function testRequestSendingWhenServiceIsUpAndValidResponse() {
-    $this->gatsbyMock
+    $this->gatsbyHealthMock
       ->expects($this->once())
       ->method('checkGatsbyHealth')
       ->will($this->returnValue(GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_UP));
@@ -112,16 +81,33 @@ class GatsbyRevisionsQueryTest extends KernelTestBase {
       ->expects($this->once())
       ->method('get')
       ->with('server_url')
-      ->willReturn('a');
+      ->willReturn('dummy_address');
 
-    $this->revisionQueryHandler->orchestrate();
+    $this
+      ->messengerMock
+      ->expects($this->never())
+      ->method('addError');
+
+    $mock = new MockHandler([
+      new Response(200, ['X-Foo' => 'Bar'], json_encode(['foo' => 'bar'])),
+    ]);
+
+    $handlerStack = HandlerStack::create($mock);
+    $client = new Client(['handler' => $handlerStack]);
+
+    $response = $this
+      ->revisionQueryHandler
+      ->setHttpClient($client)
+      ->orchestrate();
+
+    $this->assertEqual('bar', $response->foo);
   }
 
   /**
-   * Testing no request will be send when gatsby is up but the server returned a bad response.
+   * Testing when gatsby is up but the server returned a bad response.
    */
   public function testRequestSendingWhenServiceIsUpAndErroredResponse() {
-    $this->gatsbyMock
+    $this->gatsbyHealthMock
       ->expects($this->once())
       ->method('checkGatsbyHealth')
       ->will($this->returnValue(GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_UP));
@@ -130,9 +116,22 @@ class GatsbyRevisionsQueryTest extends KernelTestBase {
       ->expects($this->once())
       ->method('get')
       ->with('server_url')
-      ->willReturn('a');
+      ->willReturn('dummy_address');
 
-    $this->revisionQueryHandler->orchestrate();
+    $this
+      ->messengerMock
+      ->expects($this->once())
+      ->method('addError')
+      ->with('Error Communicating with Server');
+
+    $mock = new MockHandler([
+      new RequestException('Error Communicating with Server', new Request('GET', 'test')),
+    ]);
+
+    $handlerStack = HandlerStack::create($mock);
+    $client = new Client(['handler' => $handlerStack]);
+
+    $this->assertEmpty($this->revisionQueryHandler->setHttpClient($client)->orchestrate());
   }
 
 }
