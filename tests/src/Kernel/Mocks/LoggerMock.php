@@ -20,6 +20,13 @@ class LoggerMock implements LoggerChannelInterface {
   public $errors = [];
 
   /**
+   * List of info.
+   *
+   * @var array
+   */
+  public $info = [];
+
+  /**
    * {@inheritDoc}
    */
   public function setRequestStack(RequestStack $requestStack = NULL) {
@@ -84,6 +91,7 @@ class LoggerMock implements LoggerChannelInterface {
    * {@inheritDoc}
    */
   public function info($message, array $context = []) {
+    $this->info[] = $message;
   }
 
   /**

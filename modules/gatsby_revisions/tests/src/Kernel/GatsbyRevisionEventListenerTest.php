@@ -89,6 +89,7 @@ class GatsbyRevisionEventListenerTest extends KernelTestBase {
     $reloaded_entity = GatsbyRevision::load($gatsby_revision->id());
     $this->assertEquals('pizza', $reloaded_entity->get('error')->value);
     $this->assertEquals(GatsbyRevision::STATUS_FAILED, $reloaded_entity->get('status')->value);
+    $this->assertStringMatchesFormat('The gatsby revision, %s, set with the status failed: %s.', $this->mockLogger->info[0]);
   }
 
   /**
@@ -114,6 +115,7 @@ class GatsbyRevisionEventListenerTest extends KernelTestBase {
     $reloaded_entity = GatsbyRevision::load($gatsby_revision->id());
     $this->assertEmpty($reloaded_entity->get('error')->value);
     $this->assertEquals(GatsbyRevision::STATUS_PASSED, $reloaded_entity->get('status')->value);
+    $this->assertStringMatchesFormat('The gatsby revision, %s, set with the status success.', $this->mockLogger->info[0]);
   }
 
 }

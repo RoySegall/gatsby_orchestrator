@@ -2,6 +2,8 @@
 
 namespace Drupal\gatsby_orchestrator;
 
+use Drupal\Core\Config\Config;
+use Drupal\Core\Messenger\MessengerInterface;
 use GuzzleHttp\Client;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Component\Plugin\PluginBase;
@@ -40,6 +42,66 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
    * @var GatsbyOrchestratorGatsbyHealth
    */
   protected $gatsbyHealth;
+
+  /**
+   * Setting the messenger service.
+   *
+   * @param MessengerInterface $messenger
+   *   The messenger object.
+   *
+   * @return GatsbyOrchestratePluginBase
+   *   The current object.
+   */
+  public function setMessenger(MessengerInterface $messenger) {
+    $this->messenger = $messenger;
+
+    return $this;
+  }
+
+  /**
+   * Setting the client service.
+   *
+   * @param Client $httpClient
+   *   The client object.
+   *
+   * @return GatsbyOrchestratePluginBase
+   *   The current object.
+   */
+  public function setHttpClient(Client $httpClient) {
+    $this->httpClient = $httpClient;
+
+    return $this;
+  }
+
+  /**
+   * Setting the gatsby health service.
+   *
+   * @param GatsbyOrchestratorGatsbyHealth $gatsbyHealth
+   *   The gatsby health object.
+   *
+   * @return GatsbyOrchestratePluginBase
+   *   The current object.
+   */
+  public function setGatsbyHealth(GatsbyOrchestratorGatsbyHealth $gatsbyHealth) {
+    $this->gatsbyHealth = $gatsbyHealth;
+
+    return $this;
+  }
+
+  /**
+   * Setting the gatsby settings.
+   *
+   * @param \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig $gatsbySettings
+   *   The gatsby settings object.
+   *
+   * @return GatsbyOrchestratePluginBase
+   *   The current object.
+   */
+  public function setGatsbySettings(Config $gatsbySettings) {
+    $this->gatsbySettings = $gatsbySettings;
+
+    return $this;
+  }
 
   /**
    * GatsbyOrchestratePluginBase constructor.
