@@ -5,6 +5,7 @@ namespace Drupal\Tests\gatsby_orchestrator\Kernel;
 use Drupal\Core\Config\Config;
 use Drupal\Core\Messenger\Messenger;
 use Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth;
+use Psr\Log\LoggerInterface;
 
 /**
  * Boilerplate mocks objects.
@@ -33,6 +34,13 @@ trait MockTraits {
    * @var \PHPUnit\Framework\MockObject\MockObject|\Drupal\Core\Config\Config
    */
   public $gatsbySettingsMock;
+
+  /**
+   * The mocked logger service.
+   *
+   * @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface
+   */
+  protected $mockLogger;
 
   /**
    * Set the gatsby health mock object.
@@ -77,6 +85,19 @@ trait MockTraits {
       ->getMock();
 
     return $this->messengerMock;
+  }
+
+  /**
+   * Get the mock of the logger service.
+   *
+   * @return \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface
+   */
+  public function getLoggerMock() {
+    $this->mockLogger = $this
+      ->getMockBuilder(LoggerInterface::class)
+      ->getMock();
+
+    return $this->mockLogger;
   }
 
 }

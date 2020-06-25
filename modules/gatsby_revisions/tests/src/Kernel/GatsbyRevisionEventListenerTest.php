@@ -33,13 +33,6 @@ class GatsbyRevisionEventListenerTest extends KernelTestBase {
   protected $revisionCreationHandler;
 
   /**
-   * The mocked logger service.
-   *
-   * @var \Drupal\Tests\gatsby_orchestrator\Kernel\Mocks\LoggerMock
-   */
-  protected $mockLogger;
-
-  /**
    * {@inheritdoc}
    */
   protected function setUp() {
@@ -48,24 +41,26 @@ class GatsbyRevisionEventListenerTest extends KernelTestBase {
 
     $event_listener_plugin = $this->container->get('plugin.manager.gatsby_event_listener');
 
-    $this->mockLogger = new LoggerMock();
-
     $this->revisionCreationHandler = $event_listener_plugin->createInstance('revision_creation');
-    $this->revisionCreationHandler->setLogger($this->mockLogger);
+    $this->revisionCreationHandler
+      ->setLogger($this->getLoggerMock());
   }
 
   /**
    * Testing when there's no revision with the matching ID.
    */
   public function testHandlingNonExistingRevision() {
-
     $payload = new \stdClass();
     $payload->revisionId = 123456789;
     $payload->status = 'failed';
 
-    $this->revisionCreationHandler->handle($payload);
+    $this
+      ->mockLogger
+      ->expects($this->once())
+      ->method('error')
+      ->with('A notification for the gatsby revision with the ID 123456789 was sent but there is no record in the DB for a revision like that');
 
-    $this->assertEquals("A notification for the gatsby revision with the ID 123456789 was sent but there is no record in the DB for a revision like that", $this->mockLogger->errors[0]);
+    $this->revisionCreationHandler->handle($payload);
   }
 
   /**
@@ -84,7 +79,11 @@ class GatsbyRevisionEventListenerTest extends KernelTestBase {
 
     $gatsby_revision->save();
 
-    $gatsby_revision->getCacheContexts();
+    $this
+      ->mockLogger
+      ->expects($this->once())
+      ->method('info')
+      ->with('The gatsby revision, @title, set with the status failed: @error.');
 
     // Call the plugin with the payload.
     $this->revisionCreationHandler->handle($payload);
@@ -92,7 +91,6 @@ class GatsbyRevisionEventListenerTest extends KernelTestBase {
     $reloaded_entity = GatsbyRevision::load($gatsby_revision->id());
     $this->assertEquals('pizza', $reloaded_entity->get('error')->value);
     $this->assertEquals(GatsbyRevision::STATUS_FAILED, $reloaded_entity->get('status')->value);
-    $this->assertStringMatchesFormat('The gatsby revision, %s, set with the status failed: %s.', $this->mockLogger->info[0]);
   }
 
   /**
@@ -110,7 +108,11 @@ class GatsbyRevisionEventListenerTest extends KernelTestBase {
 
     $gatsby_revision->save();
 
-    $gatsby_revision->getCacheContexts();
+    $this
+      ->mockLogger
+      ->expects($this->once())
+      ->method('info')
+      ->with('The gatsby revision, @title, set with the status success.');
 
     // Call the plugin with the payload.
     $this->revisionCreationHandler->handle($payload);
@@ -118,7 +120,6 @@ class GatsbyRevisionEventListenerTest extends KernelTestBase {
     $reloaded_entity = GatsbyRevision::load($gatsby_revision->id());
     $this->assertEmpty($reloaded_entity->get('error')->value);
     $this->assertEquals(GatsbyRevision::STATUS_PASSED, $reloaded_entity->get('status')->value);
-    $this->assertStringMatchesFormat('The gatsby revision, %s, set with the status success.', $this->mockLogger->info[0]);
   }
 
 }

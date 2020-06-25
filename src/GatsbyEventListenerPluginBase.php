@@ -6,6 +6,7 @@ use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -16,7 +17,7 @@ abstract class GatsbyEventListenerPluginBase extends PluginBase implements Gatsb
   /**
    * The logger service.
    *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   * @var \Psr\Log\LoggerInterface
    */
   protected $logger;
 
@@ -29,7 +30,7 @@ abstract class GatsbyEventListenerPluginBase extends PluginBase implements Gatsb
    * @return GatsbyEventListenerPluginBase
    *   The current object.
    */
-  public function setLogger(LoggerChannelInterface $logger) {
+  public function setLogger(LoggerInterface $logger) {
     $this->logger = $logger;
 
     return $this;
