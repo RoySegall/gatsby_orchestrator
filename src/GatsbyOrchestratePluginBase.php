@@ -2,6 +2,10 @@
 
 namespace Drupal\gatsby_orchestrator;
 
+use Drupal\Core\Config\Config;
+use Drupal\Core\Messenger\MessengerInterface;
+use GuzzleHttp\Client;
+use Drupal\Core\Config\ConfigFactory;
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Messenger\Messenger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -12,43 +16,118 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyOrchestrateInterface {
 
   /**
+   * The gatsby settings factory.
+   *
    * @var \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig
    */
   protected $gatsbySettings;
 
   /**
-   * @var Messenger
+   * The messenger service.
+   *
+   * @var \Drupal\Core\Messenger\Messenger
    */
   protected $messenger;
 
   /**
+   * The http client service.
+   *
    * @var \GuzzleHttp\Client
    */
   protected $httpClient;
 
   /**
+   * The gatsby health service.
+   *
    * @var GatsbyOrchestratorGatsbyHealth
    */
   protected $gatsbyHealth;
 
   /**
+   * Setting the messenger service.
+   *
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger object.
+   *
+   * @return GatsbyOrchestratePluginBase
+   *   The current object.
+   */
+  public function setMessenger(MessengerInterface $messenger) {
+    $this->messenger = $messenger;
+
+    return $this;
+  }
+
+  /**
+   * Setting the client service.
+   *
+   * @param \GuzzleHttp\Client $httpClient
+   *   The client object.
+   *
+   * @return GatsbyOrchestratePluginBase
+   *   The current object.
+   */
+  public function setHttpClient(Client $httpClient) {
+    $this->httpClient = $httpClient;
+
+    return $this;
+  }
+
+  /**
+   * Setting the gatsby health service.
+   *
+   * @param GatsbyOrchestratorGatsbyHealth $gatsbyHealth
+   *   The gatsby health object.
+   *
+   * @return GatsbyOrchestratePluginBase
+   *   The current object.
+   */
+  public function setGatsbyHealth(GatsbyOrchestratorGatsbyHealth $gatsbyHealth) {
+    $this->gatsbyHealth = $gatsbyHealth;
+
+    return $this;
+  }
+
+  /**
+   * Setting the gatsby settings.
+   *
+   * @param \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig $gatsbySettings
+   *   The gatsby settings object.
+   *
+   * @return GatsbyOrchestratePluginBase
+   *   The current object.
+   */
+  public function setGatsbySettings(Config $gatsbySettings) {
+    $this->gatsbySettings = $gatsbySettings;
+
+    return $this;
+  }
+
+  /**
    * GatsbyOrchestratePluginBase constructor.
    *
    * @param array $configuration
-   * @param $plugin_id
-   * @param $plugin_definition
+   *   The array configuration.
+   * @param string $plugin_id
+   *   The plugin ID.
+   * @param array $plugin_definition
+   *   The plugin definition.
    * @param \Drupal\Core\Config\ConfigFactory $config_factory
-   * @param Messenger $messenger
+   *   The config factor service.
+   * @param \Drupal\Core\Messenger\Messenger $messenger
+   *   The messenger service.
    * @param \GuzzleHttp\Client $http_client
+   *   The http client service.
    * @param GatsbyOrchestratorGatsbyHealth $gatsby_health
+   *   The gatsby health service.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
-    $plugin_definition,
-    \Drupal\Core\Config\ConfigFactory $config_factory,
+    array $plugin_definition,
+    ConfigFactory $config_factory,
     Messenger $messenger,
-    \GuzzleHttp\Client $http_client,
+    Client $http_client,
     GatsbyOrchestratorGatsbyHealth $gatsby_health
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -85,12 +164,13 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
   /**
    * A helper function to send generic requests to gatsby dev server.
    *
-   * @param $method
-   *  The method of the request: get, post etc. etc.
-   * @param $endpoint
-   *  The endpoint.
+   * @param string $method
+   *   The method of the request: get, post etc. etc.
+   * @param string $endpoint
+   *   The endpoint.
    *
-   * @return mixed|void
+   * @return mixed
+   *   Decoded object of the response if not error has happens.
    */
   protected function sendRequest($method, $endpoint) {
     $address = $this->gatsbySettings->get('server_url');
@@ -98,7 +178,8 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
     try {
       $response = $this->httpClient->{$method}($address . $endpoint);
       return json_decode($response->getBody()->getContents());
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       $this->messenger->addError($e->getMessage());
       return;
     }
@@ -106,6 +187,10 @@ abstract class GatsbyOrchestratePluginBase extends PluginBase implements GatsbyO
 
   /**
    * Trigger the action we need to do.
+   *
+   * @return mixed
+   *   Any data the plugin desire to return.
    */
-  abstract function orchestrate();
+  abstract public function orchestrate();
+
 }

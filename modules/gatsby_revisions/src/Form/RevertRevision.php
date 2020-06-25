@@ -7,8 +7,6 @@ use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\gatsby_orchestrator\GatsbyOrchestratePluginManager;
-use Drupal\gatsby_revisions\Entity\GatsbyRevision;
-use Drupal\gatsby_revisions\Plugin\GatsbyOrchestrate\GatsbyRevisionsRevert;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -17,15 +15,29 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class RevertRevision extends ConfirmFormBase {
 
   /**
-   * @var GatsbyRevisionsRevert
+   * The revert revision plugin.
+   *
+   * @var \Drupal\gatsby_revisions\Plugin\GatsbyOrchestrate\GatsbyRevisionsRevert
    */
   protected $revertRevision;
 
   /**
-   * @var EntityTypeManagerInterface
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
+  /**
+   * RevertRevision constructor.
+   *
+   * @param \Drupal\gatsby_orchestrator\GatsbyOrchestratePluginManager $gatsby_orchestrator_plugin_manager
+   *   The gatsby orchestrator plugin manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
+   */
   public function __construct(GatsbyOrchestratePluginManager $gatsby_orchestrator_plugin_manager, EntityTypeManagerInterface $entity_type_manager) {
     $this->revertRevision = $gatsby_orchestrator_plugin_manager->createInstance('revert_revision');
     $this->entityTypeManager = $entity_type_manager;
@@ -68,7 +80,7 @@ class RevertRevision extends ConfirmFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $gatsby_revision = \Drupal::request()->attributes->get('gatsby_revision');
 
-    /** @var GatsbyRevision $gatsby_revision */
+    /** @var \Drupal\gatsby_revisions\Entity\GatsbyRevision $gatsby_revision */
     $gatsby_revision = $this->entityTypeManager->getStorage('gatsby_revision')->load($gatsby_revision);
 
     $response = $this

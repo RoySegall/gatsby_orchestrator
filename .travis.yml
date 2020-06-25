@@ -1,0 +1,39 @@
+language: php
+
+sudo: false
+
+php:
+  - 7.3
+  - 7.2
+
+mysql:
+  database: drupal
+  username: root
+  encoding: utf8
+
+services:
+  - mysql
+
+before_install:
+  # Codesniffer.
+  - composer global require squizlabs/php_codesniffer:3.5.5
+
+  # Coder.
+  - composer global require drupal/coder:8.3.9
+  - mysql -e 'create database drupal'
+  - export SIMPLETEST_DB=mysql://root:@127.0.0.1/drupal
+
+install:
+  - cd ../
+  - git clone --branch 8.9.x https://git.drupalcode.org/project/drupal.git
+  - mv gatsby_orchestrator drupal/modules/gatsby_orchestrator
+  - cd drupal && composer install
+
+script:
+  # Run code sniffer.
+  - /home/travis/.config/composer/vendor/squizlabs/php_codesniffer/bin/phpcs --report=full --standard=/home/travis/.config/composer/vendor/drupal/coder/coder_sniffer/Drupal/ --colors modules/gatsby_orchestrator
+
+  # Run tests.
+  - cd core
+  - ls ../modules/
+  - ../vendor/bin/phpunit -c ./phpunit.xml.dist ../modules/gatsby_orchestrator

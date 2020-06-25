@@ -2,12 +2,8 @@
 
 namespace Drupal\gatsby_revisions\Plugin\GatsbyOrchestrate;
 
-use Drupal\gatsby_orchestrator\GatsbyOrchestrateInterface;
-
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\gatsby_orchestrator\GatsbyOrchestratePluginBase;
 use Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the gatsby_orchestrate.
@@ -26,14 +22,14 @@ class GatsbyRevisionCreate extends GatsbyOrchestratePluginBase {
   public function orchestrate() {
 
     if ($this->gatsbyHealth->checkGatsbyHealth() == GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_DOWN) {
-      return;
+      return NULL;
     }
 
     if ($response = $this->sendRequest('post', 'revision')) {
       return $response->revisionId;
     }
 
-    return;
+    return NULL;
   }
 
 }
