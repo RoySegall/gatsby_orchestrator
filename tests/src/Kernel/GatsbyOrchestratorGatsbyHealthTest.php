@@ -4,7 +4,6 @@ namespace Drupal\Tests\gatsby_orchestrator\Kernel;
 
 use Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth;
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\Tests\gatsby_orchestrator\Kernel\Mocks\MessengerMock;
 use GuzzleHttp\Handler\MockHandler;
 
 use GuzzleHttp\Client;
@@ -20,6 +19,8 @@ use GuzzleHttp\Exception\RequestException;
  */
 class GatsbyOrchestratorGatsbyHealthTest extends KernelTestBase {
 
+  use MockTraits;
+
   /**
    * {@inheritdoc}
    */
@@ -31,13 +32,6 @@ class GatsbyOrchestratorGatsbyHealthTest extends KernelTestBase {
    * @var \Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth
    */
   protected $gatsbyHealth;
-
-  /**
-   * The messenger service.
-   *
-   * @var \Drupal\Tests\gatsby_orchestrator\Kernel\Mocks\MessengerMock
-   */
-  protected $messenger;
 
   /**
    * {@inheritdoc}
@@ -52,36 +46,36 @@ class GatsbyOrchestratorGatsbyHealthTest extends KernelTestBase {
 
     $handlerStack = HandlerStack::create($mock);
     $client = new Client(['handler' => $handlerStack]);
-    $this->messenger = new MessengerMock();
 
     $this->gatsbyHealth = $this->container->get('gatsby_orchestrator.gatsby_health');
     $this->gatsbyHealth
       ->setHttpClient($client)
-      ->setMessenger($this->messenger);
+      ->setGatsbySettings($this->setGatsbySettingsMock())
+      ->setMessenger($this->setMessengerMock());
+
+    $this->messengerMock->expects($this->atLeast(2))->method('addError');
+
+    $this->gatsbySettingsMock->expects($this->at(0))->method('get')->with('server_url')->willReturn(NULL);
+    $this->gatsbySettingsMock->expects($this->at(1))->method('get')->with('server_url')->willReturn('http://google.com');
+    $this->gatsbySettingsMock->expects($this->at(2))->method('get')->with('server_url')->willReturn('http://google.com');
   }
 
   /**
    * Testing the scenarios of getting the health of the gatsby service.
    */
   public function testHealthOfTheGatsbyServer() {
-    // Send a request without an address and make sure we an error is tracked.
-    $this->gatsbyHealth->checkGatsbyHealth();
+    $this->messengerMock->expects($this->at(0))->method('addError')->with('It seems that the address of the gatsby server has not been set.');
+    $this->messengerMock->expects($this->at(1))->method('addError')->with('Error Communicating with Server');
 
-    $this->assertEquals(
-      "It seems that the address of the gatsby server has not been set.",
-      $this->messenger->errors[0]
-    );
-
-    // Set a dummy address and see how we handle mocked results.
-    $results = $this
-      ->gatsbyHealth
-      ->setAddress('http://google.com')
-      ->checkGatsbyHealth();
-
+    // Checking handling with a null address.
+    $results = $this->gatsbyHealth->checkGatsbyHealth();
     $this->assertEquals(GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_DOWN, $results);
-    $this->assertEquals("Error Communicating with Server", $this->messenger->errors[1]);
 
-    // Wait for a successful request.
+    // Checking handling error.
+    $results = $this->gatsbyHealth->checkGatsbyHealth();
+    $this->assertEquals(GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_DOWN, $results);
+
+    // Checking handling success.
     $results = $this->gatsbyHealth->checkGatsbyHealth();
     $this->assertEquals(GatsbyOrchestratorGatsbyHealth::GATSBY_SERVICE_UP, $results);
   }

@@ -23,28 +23,6 @@ class GatsbyOrchestratorGatsbyHealth {
   const GATSBY_SERVICE_UP = 1;
 
   /**
-   * The address of the gatsby server.
-   *
-   * @var string
-   */
-  protected $address;
-
-  /**
-   * Setting the address.
-   *
-   * @param string $address
-   *   The address of the gatsby development server.
-   *
-   * @retun $this
-   *   The current object.
-   */
-  public function setAddress(string $address) {
-    $this->address = $address;
-
-    return $this;
-  }
-
-  /**
    * The gatsby setting config factory.
    *
    * @var \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig
@@ -82,18 +60,6 @@ class GatsbyOrchestratorGatsbyHealth {
   }
 
   /**
-   * Setting the messenger object.
-   *
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The service object.
-   */
-  public function setMessenger(MessengerInterface $messenger) {
-    $this->messenger = $messenger;
-
-    return $this;
-  }
-
-  /**
    * Set the http client.
    *
    * @param \GuzzleHttp\ClientInterface $httpClient
@@ -106,19 +72,33 @@ class GatsbyOrchestratorGatsbyHealth {
   }
 
   /**
-   * Get the address of the GatsbyJS server.
+   * Setting the settings service.
    *
-   * @return string
-   *   The address of the GatsbyJS server.
+   * @param \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig $gatsbySettings
+   *   The replacement.
+   *
+   * @retrn GatsbyOrchestratorGatsbyHealth
+   *   The current object.
    */
-  public function getAddress() {
+  public function setGatsbySettings($gatsbySettings) {
+    $this->gatsbySettings = $gatsbySettings;
 
-    if (!$this->address) {
-      $this->address = $this->gatsbySettings->get('server_url');
-      return $this->address;
-    }
+    return $this;
+  }
 
-    return $this->address;
+  /**
+   * Setting the messenger service.
+   *
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger object.
+   *
+   * @return GatsbyOrchestratorGatsbyHealth
+   *   The current object.
+   */
+  public function setMessenger(MessengerInterface $messenger) {
+    $this->messenger = $messenger;
+
+    return $this;
   }
 
   /**
@@ -128,7 +108,7 @@ class GatsbyOrchestratorGatsbyHealth {
    *   True in case the server is up false if not.
    */
   public function checkGatsbyHealth() {
-    $address = $this->getAddress();
+    $address = $this->gatsbySettings->get('server_url');
 
     if (!$address) {
       $this->messenger->addError(t('It seems that the address of the gatsby server has not been set.'));
