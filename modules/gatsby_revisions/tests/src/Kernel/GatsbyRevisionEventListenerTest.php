@@ -4,8 +4,7 @@ namespace Drupal\Tests\gatsby_revisions\Kernel;
 
 use Drupal\gatsby_revisions\Entity\GatsbyRevision;
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\Tests\gatsby_orchestrator\Kernel\Mocks\LoggerMock;
-use Drupal\Tests\gatsby_orchestrator\Kernel\MockTraits;
+use Drupal\Tests\gatsby_orchestrator\Kernel\GatsbyOrchestrateMockObjectsHelper;
 
 /**
  * Test description.
@@ -14,7 +13,7 @@ use Drupal\Tests\gatsby_orchestrator\Kernel\MockTraits;
  */
 class GatsbyRevisionEventListenerTest extends KernelTestBase {
 
-  use MockTraits;
+  use GatsbyOrchestrateMockObjectsHelper;
 
   /**
    * {@inheritdoc}
@@ -43,7 +42,7 @@ class GatsbyRevisionEventListenerTest extends KernelTestBase {
 
     $this->revisionCreationHandler = $event_listener_plugin->createInstance('revision_creation');
     $this->revisionCreationHandler
-      ->setLogger($this->getLoggerMock());
+      ->setLogger($this->getAndSetLoggerMock());
   }
 
   /**
@@ -55,7 +54,7 @@ class GatsbyRevisionEventListenerTest extends KernelTestBase {
     $payload->status = 'failed';
 
     $this
-      ->mockLogger
+      ->loggerMock
       ->expects($this->once())
       ->method('error')
       ->with('A notification for the gatsby revision with the ID 123456789 was sent but there is no record in the DB for a revision like that');
@@ -80,7 +79,7 @@ class GatsbyRevisionEventListenerTest extends KernelTestBase {
     $gatsby_revision->save();
 
     $this
-      ->mockLogger
+      ->loggerMock
       ->expects($this->once())
       ->method('info')
       ->with('The gatsby revision, @title, set with the status failed: @error.');
@@ -109,7 +108,7 @@ class GatsbyRevisionEventListenerTest extends KernelTestBase {
     $gatsby_revision->save();
 
     $this
-      ->mockLogger
+      ->loggerMock
       ->expects($this->once())
       ->method('info')
       ->with('The gatsby revision, @title, set with the status success.');

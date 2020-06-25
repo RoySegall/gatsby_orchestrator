@@ -19,7 +19,7 @@ use GuzzleHttp\Exception\RequestException;
  */
 class GatsbyOrchestratorGatsbyHealthTest extends KernelTestBase {
 
-  use MockTraits;
+  use GatsbyOrchestrateMockObjectsHelper;
 
   /**
    * {@inheritdoc}
@@ -50,8 +50,8 @@ class GatsbyOrchestratorGatsbyHealthTest extends KernelTestBase {
     $this->gatsbyHealth = $this->container->get('gatsby_orchestrator.gatsby_health');
     $this->gatsbyHealth
       ->setHttpClient($client)
-      ->setGatsbySettings($this->setGatsbySettingsMock())
-      ->setMessenger($this->setMessengerMock());
+      ->setGatsbySettings($this->getAndSetGatsbySettingsMock())
+      ->setMessenger($this->getAndSetMessengerMock());
 
     $this->messengerMock->expects($this->atLeast(2))->method('addError');
 

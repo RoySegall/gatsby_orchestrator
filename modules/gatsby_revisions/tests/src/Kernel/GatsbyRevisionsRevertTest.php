@@ -3,7 +3,7 @@
 namespace Drupal\Tests\gatsby_revisions\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\Tests\gatsby_orchestrator\Kernel\MockTraits;
+use Drupal\Tests\gatsby_orchestrator\Kernel\GatsbyOrchestrateMockObjectsHelper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\MockHandler;
@@ -18,7 +18,7 @@ use GuzzleHttp\Psr7\Response;
  */
 class GatsbyRevisionsRevertTest extends KernelTestBase {
 
-  use MockTraits;
+  use GatsbyOrchestrateMockObjectsHelper;
 
   /**
    * {@inheritdoc}
@@ -47,9 +47,9 @@ class GatsbyRevisionsRevertTest extends KernelTestBase {
     $this->revisionRevertHandler = $event_listener_plugin->createInstance('revert_revision');
 
     $this->revisionRevertHandler
-      ->setGatsbyHealth($this->setGatsbyHealthMock())
-      ->setGatsbySettings($this->setGatsbySettingsMock())
-      ->setMessenger($this->setMessengerMock());
+      ->setGatsbyHealth($this->getAndSetGatsbyHealthMock())
+      ->setGatsbySettings($this->getAndSetGatsbySettingsMock())
+      ->setMessenger($this->getAndSetMessengerMock());
   }
 
   /**

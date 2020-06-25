@@ -4,7 +4,7 @@ namespace Drupal\Tests\gatsby_revisions\Kernel;
 
 use Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth;
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\Tests\gatsby_orchestrator\Kernel\MockTraits;
+use Drupal\Tests\gatsby_orchestrator\Kernel\GatsbyOrchestrateMockObjectsHelper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\MockHandler;
@@ -19,7 +19,7 @@ use GuzzleHttp\Psr7\Response;
  */
 class GatsbyRevisionCreateTest extends KernelTestBase {
 
-  use MockTraits;
+  use GatsbyOrchestrateMockObjectsHelper;
 
   /**
    * {@inheritdoc}
@@ -48,9 +48,9 @@ class GatsbyRevisionCreateTest extends KernelTestBase {
     $this->revisionCreateHandler = $event_listener_plugin->createInstance('create_revision');
 
     $this->revisionCreateHandler
-      ->setGatsbyHealth($this->setGatsbyHealthMock())
-      ->setGatsbySettings($this->setGatsbySettingsMock())
-      ->setMessenger($this->setMessengerMock());
+      ->setGatsbyHealth($this->getAndSetGatsbyHealthMock())
+      ->setGatsbySettings($this->getAndSetGatsbySettingsMock())
+      ->setMessenger($this->getAndSetMessengerMock());
   }
 
   /**

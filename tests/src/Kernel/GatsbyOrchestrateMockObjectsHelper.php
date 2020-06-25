@@ -10,9 +10,11 @@ use Psr\Log\LoggerInterface;
 /**
  * Boilerplate mocks objects.
  *
+ * This class holds all the mock helpers that we need for mocking elements.
+ *
  * @package Drupal\Tests\gatsby_orchestrator\Kernel
  */
-trait MockTraits {
+trait GatsbyOrchestrateMockObjectsHelper {
 
   /**
    * The mocked messenger object.
@@ -40,7 +42,7 @@ trait MockTraits {
    *
    * @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface
    */
-  protected $mockLogger;
+  protected $loggerMock;
 
   /**
    * Set the gatsby health mock object.
@@ -48,7 +50,7 @@ trait MockTraits {
    * @return \Drupal\gatsby_orchestrator\GatsbyOrchestratorGatsbyHealth|\PHPUnit\Framework\MockObject\MockObject
    *   The mock object.
    */
-  public function setGatsbyHealthMock() {
+  public function getAndSetGatsbyHealthMock() {
     $this->gatsbyHealthMock = $this
       ->getMockBuilder(GatsbyOrchestratorGatsbyHealth::class)
       ->disableOriginalConstructor()
@@ -63,7 +65,7 @@ trait MockTraits {
    * @return \Drupal\Core\Config\Config|\PHPUnit\Framework\MockObject\MockObject
    *   The mock object.
    */
-  public function setGatsbySettingsMock() {
+  public function getAndSetGatsbySettingsMock() {
     $this->gatsbySettingsMock = $this
       ->getMockBuilder(Config::class)
       ->disableOriginalConstructor()
@@ -78,7 +80,7 @@ trait MockTraits {
    * @return \Drupal\Core\Messenger\Messenger|\PHPUnit\Framework\MockObject\MockObject
    *   The mock object.
    */
-  public function setMessengerMock() {
+  public function getAndSetMessengerMock() {
     $this->messengerMock = $this
       ->getMockBuilder(Messenger::class)
       ->disableOriginalConstructor()
@@ -92,12 +94,12 @@ trait MockTraits {
    *
    * @return \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface
    */
-  public function getLoggerMock() {
-    $this->mockLogger = $this
+  public function getAndSetLoggerMock() {
+    $this->loggerMock = $this
       ->getMockBuilder(LoggerInterface::class)
       ->getMock();
 
-    return $this->mockLogger;
+    return $this->loggerMock;
   }
 
 }
