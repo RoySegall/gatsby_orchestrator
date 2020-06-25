@@ -93,6 +93,7 @@ trait GatsbyOrchestrateMockObjectsHelper {
    * Get the mock of the logger service.
    *
    * @return \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface
+   *   The mocked log object.
    */
   public function getAndSetLoggerMock() {
     $this->loggerMock = $this
