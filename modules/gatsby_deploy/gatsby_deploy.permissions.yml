@@ -1,0 +1,4 @@
+administer gatsby_deploy configuration:
+  title: 'Administer gatsby_deploy configuration'
+  description: 'Optional description.'
+  restrict access: true
