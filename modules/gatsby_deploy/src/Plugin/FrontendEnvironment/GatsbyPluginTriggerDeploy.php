@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @FrontendEnvironment(
  *  id = "gatsby-plugin-trigger-deploy",
  *  label = "Gatsby plugin trigger deploy",
- *  description = @translation("Connect Gatsby plugin trigger deploy endpoints")
+ *  description = @Translation("Connect Gatsby plugin trigger deploy endpoints")
  * )
  */
 class GatsbyPluginTriggerDeploy extends FrontendEnvironmentBase implements ContainerFactoryPluginInterface {
