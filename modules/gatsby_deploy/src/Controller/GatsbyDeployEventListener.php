@@ -24,7 +24,7 @@ class GatsbyDeployEventListener extends ControllerBase {
   /**
    * The request object.
    *
-   * @var Request
+   * @var \Symfony\Component\HttpFoundation\Request
    */
   protected $request;
 
@@ -33,7 +33,7 @@ class GatsbyDeployEventListener extends ControllerBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param Request $request
+   * @param \Symfony\Component\HttpFoundation\Request $request
    *   The request object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, Request $request) {
