@@ -21,6 +21,11 @@ class GatsbyDeployEventListener extends ControllerBase {
    */
   protected $entityTypeManager;
 
+  /**
+   * The request object.
+   *
+   * @var Request
+   */
   protected $request;
 
   /**
@@ -28,6 +33,8 @@ class GatsbyDeployEventListener extends ControllerBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param Request $request
+   *   The request object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, Request $request) {
     $this->entityTypeManager = $entity_type_manager;
@@ -44,6 +51,18 @@ class GatsbyDeployEventListener extends ControllerBase {
     );
   }
 
+  /**
+   * Get the frontend environment by the secret key.
+   *
+   * We need the ID so we can display the logs of deployment.
+   *
+   * @return mixed|null
+   *   In case we found a matching frontend environment the ID of the frontend
+   *   environment will be return.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
   protected function getFrontendEnvironmentFromSecretKey() {
     $payload = json_decode($this->request->getContent());
 
@@ -66,20 +85,17 @@ class GatsbyDeployEventListener extends ControllerBase {
   }
 
   /**
-   * Custom access callback.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   Run access checks for this account.
-   *
-   * @return \Drupal\Core\Access\AccessResultInterface
-   *   The access result.
+   * {@inheritDoc}
    */
   public function access(AccountInterface $account) {
     return AccessResult::allowedIf($this->getFrontendEnvironmentFromSecretKey() != NULL);
   }
 
   /**
-   * Builds the response.
+   * Creating records.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function build() {
     $environment_id = $this->getFrontendEnvironmentFromSecretKey();

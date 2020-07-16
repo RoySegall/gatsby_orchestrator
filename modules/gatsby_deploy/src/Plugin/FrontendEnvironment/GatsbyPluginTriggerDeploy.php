@@ -6,7 +6,6 @@ use Drupal\build_hooks\BuildHookDetails;
 use Drupal\build_hooks\Plugin\FrontendEnvironmentBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerTrait;
-use Laminas\Stdlib\RequestInterface;
 
 /**
  * Provides a 'Gatsby plugin trigger deploy' frontend environment type.
@@ -36,10 +35,10 @@ class GatsbyPluginTriggerDeploy extends FrontendEnvironmentBase {
 
     $form['secret_key'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Project name'),
+      '#title' => $this->t('Secret key'),
       '#maxlength' => 255,
       '#default_value' => isset($this->configuration['secret_key']) ? $this->configuration['secret_key'] : '',
-      '#description' => $this->t("The sectrt key for trigger events."),
+      '#description' => $this->t("The secret key which has been set in the gatsby configuration."),
       '#required' => TRUE,
     ];
 
@@ -59,13 +58,16 @@ class GatsbyPluginTriggerDeploy extends FrontendEnvironmentBase {
    */
   public function getBuildHookDetails() {
     $buildHookDetails = new BuildHookDetails();
+
     $buildHookDetails->setUrl($this->configuration['build_hook_url']);
     $buildHookDetails->setMethod('POST');
     $buildHookDetails->setBody([
-      'json' => ['secret_key' =>  $this->configuration['secret_key']]
+      'json' => ['secret_key' => $this->configuration['secret_key']],
     ]);
+
     return $buildHookDetails;
   }
+
   /**
    * {@inheritdoc}
    */
