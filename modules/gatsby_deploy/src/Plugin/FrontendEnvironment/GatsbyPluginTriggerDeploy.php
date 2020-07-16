@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\gatsby_deploy\Entity\GatsbyDeploy;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a 'Gatsby plugin trigger deploy' frontend environment type.
@@ -52,8 +53,7 @@ class GatsbyPluginTriggerDeploy extends FrontendEnvironmentBase implements Conta
    * @param \Drupal\Core\Datetime\DateFormatter $date_formatter
    *   The date formatter service.
    */
-  public function __construct(
-    array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, DateFormatter $date_formatter) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, DateFormatter $date_formatter) {
 
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entity_type_manager;
@@ -63,7 +63,7 @@ class GatsbyPluginTriggerDeploy extends FrontendEnvironmentBase implements Conta
   /**
    * {@inheritdoc}
    */
-  public static function create(\Symfony\Component\DependencyInjection\ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration,
       $plugin_id,
@@ -161,7 +161,6 @@ class GatsbyPluginTriggerDeploy extends FrontendEnvironmentBase implements Conta
       ->sort('created', 'desc')
       ->execute();
 
-    /** @var GatsbyDeploy[] $deployments */
     $deployments = $this->entityTypeManager->getStorage('gatsby_deploy')->loadMultiple($deployments_ids);
 
     foreach ($deployments as $index => $deployment) {
@@ -172,9 +171,7 @@ class GatsbyPluginTriggerDeploy extends FrontendEnvironmentBase implements Conta
         ],
         'status' => [
           '#type' => 'item',
-          '#markup' => $deployment->get('status')->value == GatsbyDeploy::STATUS_PASSED ?
-            $this->t('Created successfully') :
-            $this->t('Failed, please check the logs'),
+          '#markup' => $deployment->get('status')->value == GatsbyDeploy::STATUS_PASSED ? $this->t('Created successfully') : $this->t('Failed, please check the logs'),
         ],
       ];
     }

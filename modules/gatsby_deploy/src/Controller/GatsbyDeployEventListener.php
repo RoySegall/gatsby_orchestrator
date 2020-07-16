@@ -108,9 +108,7 @@ class GatsbyDeployEventListener extends ControllerBase {
       ->getStorage('gatsby_deploy')
       ->create([
         'frontend_environment' => $environment_id,
-        'status' => $payload->status == 'succeeded' ?
-          \Drupal\gatsby_deploy\Entity\GatsbyDeploy::STATUS_PASSED :
-          \Drupal\gatsby_deploy\Entity\GatsbyDeploy::STATUS_FAILED,
+        'status' => $payload->status == 'succeeded' ? \Drupal\gatsby_deploy\Entity\GatsbyDeploy::STATUS_PASSED : \Drupal\gatsby_deploy\Entity\GatsbyDeploy::STATUS_FAILED,
         'created_at' => time(),
       ]);
 
