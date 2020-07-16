@@ -15,5 +15,5 @@ There are two submodules:
 * Gatsby Revisions - provide a way to maintain a list of revision thus having
 backup and rolling back content creation.
 
-* Gatsby deploy - *TBD* - Allows you to deploy your current GatsbyJS to various
-static site hosting solutions.
+* Gatsby deploy - Allows you to trigger the `deploy` command. Best fit for a
+self hosted gatsby.
