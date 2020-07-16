@@ -1,0 +1,8 @@
+name: Gatsby Deploy
+type: module
+description: Interacting with the gatsby-plugin-trigger-deploy plugin
+package: Custom
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - build_hooks

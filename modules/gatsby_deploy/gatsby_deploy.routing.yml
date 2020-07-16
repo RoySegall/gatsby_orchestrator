@@ -1,0 +1,7 @@
+gatsby_deploy.listener:
+  path: 'gatsby-deploy/event-listener'
+  defaults:
+    _title: 'Example'
+    _controller: '\Drupal\gatsby_deploy\Controller\GatsbyDeployEventListener::build'
+  requirements:
+    _custom_access: '\Drupal\gatsby_deploy\Controller\GatsbyDeployEventListener::access'
