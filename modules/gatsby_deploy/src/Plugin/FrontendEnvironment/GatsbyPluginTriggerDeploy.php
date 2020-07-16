@@ -21,14 +21,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *  description = @translation("Connect Gatsby plugin trigger deploy endpoints")
  * )
  */
-class GatsbyPluginTriggerDeploy extends FrontendEnvironmentBase implements ContainerFactoryPluginInterface{
+class GatsbyPluginTriggerDeploy extends FrontendEnvironmentBase implements ContainerFactoryPluginInterface {
 
   use MessengerTrait;
 
   /**
    * The entity type manager service.
    *
-   * @var EntityTypeManagerInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
