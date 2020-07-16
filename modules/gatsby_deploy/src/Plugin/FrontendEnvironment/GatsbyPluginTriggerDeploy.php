@@ -54,8 +54,8 @@ class GatsbyPluginTriggerDeploy extends FrontendEnvironmentBase implements Conta
    *   The date formatter service.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, DateFormatter $date_formatter) {
-
     parent::__construct($configuration, $plugin_id, $plugin_definition);
+
     $this->entityTypeManager = $entity_type_manager;
     $this->dateFormatter = $date_formatter;
   }
