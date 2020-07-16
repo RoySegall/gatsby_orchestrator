@@ -7,7 +7,9 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Returns responses for Gatsby Deploy routes.
@@ -99,6 +101,22 @@ class GatsbyDeployEventListener extends ControllerBase {
    */
   public function build() {
     $environment_id = $this->getFrontendEnvironmentFromSecretKey();
+    $payload = json_decode($this->request->getContent());
+
+    $entity = $this
+      ->entityTypeManager
+      ->getStorage('gatsby_deploy')
+      ->create([
+        'frontend_environment' => $environment_id,
+        'status' => $payload->status == 'succeeded' ?
+          \Drupal\gatsby_deploy\Entity\GatsbyDeploy::STATUS_PASSED :
+          \Drupal\gatsby_deploy\Entity\GatsbyDeploy::STATUS_FAILED,
+        'created_at' => time(),
+      ]);
+
+    $entity->save();
+
+    return new JsonResponse(['message' => 'Created successfully'], Response::HTTP_CREATED);
   }
 
 }
